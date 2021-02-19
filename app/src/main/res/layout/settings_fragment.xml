@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.settings.SettingsFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_api_key"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/base_margin"
+                android:layout_marginVertical="@dimen/base_vertical_margin"
+                android:hint="@string/setting_api_key_hint">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_api_key"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_token"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/base_margin"
+                android:layout_marginVertical="@dimen/base_vertical_margin"
+                android:hint="@string/setting_token_hint">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_token"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/auth_code"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/base_margin"
+                android:layout_marginVertical="@dimen/base_vertical_margin" />
+
+            <Button
+                android:id="@+id/generate_auth"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/base_margin"
+                android:layout_marginVertical="@dimen/base_vertical_margin"
+                android:text="@string/setting_generate_auth" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_workspace"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/base_margin"
+                android:layout_marginVertical="@dimen/base_vertical_margin"
+                android:hint="@string/setting_workspace">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_workspace"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_user_login"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/base_margin"
+                android:layout_marginVertical="@dimen/base_vertical_margin"
+                android:hint="@string/setting_login">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_user_login"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_user_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/base_margin"
+                android:layout_marginVertical="@dimen/base_vertical_margin"
+                android:hint="@string/setting_password">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_user_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/sid"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/base_margin"
+                android:layout_marginVertical="@dimen/base_vertical_margin" />
+
+            <Button
+                android:id="@+id/generate_sid"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/base_margin"
+                android:layout_marginVertical="@dimen/base_vertical_margin"
+                android:text="@string/setting_generate_sid" />
+        </LinearLayout>
+    </ScrollView>
+
+</FrameLayout>

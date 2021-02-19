@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Planfix Scan</string>
+
+    <string name="setting_api_key_hint">Api Key</string>
+    <string name="setting_token_hint">Token</string>
+    <string name="setting_generate_auth">Создать код аутентификации</string>
+    <string name="setting_workspace">Название компании</string>
+    <string name="setting_login">Логин пользователя</string>
+    <string name="setting_password">Пароль пользователя</string>
+    <string name="setting_generate_sid">Получить SID</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
