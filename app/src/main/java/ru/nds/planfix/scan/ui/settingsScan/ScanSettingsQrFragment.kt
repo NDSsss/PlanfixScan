@@ -21,9 +21,14 @@ class ScanSettingsQrFragment : Fragment(R.layout.fragment_scan_settings_qr) {
                 "APP_TAG",
                 "${this::class.java.simpleName} ${this::class.java.hashCode()} settings scan result: $rawResult"
             );
-            (activity as? MainActivity)?.settingsQrScannedListener?.onSettingsQrScanned(
-                rawResult?.text ?: ""
-            )
+            when (arguments?.getInt(SETTINGS_TYPE_PARAM, -1)) {
+                SETTINGS_PRODUCTS -> (activity as? MainActivity)?.settingsQrScannedListener?.onProductSettingsQrScanned(
+                    rawResult?.text ?: ""
+                )
+                SETTINGS_STAGES -> (activity as? MainActivity)?.settingsQrScannedListener?.onStagesSettingQrScanned(
+                    rawResult?.text ?: ""
+                )
+            }
             requireActivity().supportFragmentManager.popBackStack()
         }
     }
@@ -56,7 +61,15 @@ class ScanSettingsQrFragment : Fragment(R.layout.fragment_scan_settings_qr) {
 
 
     companion object {
+        const val SETTINGS_PRODUCTS = 1
+        const val SETTINGS_STAGES = 2
         const val TAG = "ScanSettingsQrFragment"
-        fun newInstance() = ScanSettingsQrFragment()
+
+        private const val SETTINGS_TYPE_PARAM = "SETTINGS_TYPE_PARAM"
+        fun newInstance(settingsType: Int) = ScanSettingsQrFragment().apply {
+            arguments = Bundle().apply {
+                putInt(SETTINGS_TYPE_PARAM, settingsType)
+            }
+        }
     }
 }

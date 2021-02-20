@@ -30,7 +30,6 @@ class SettingsFragment : Fragment(R.layout.settings_fragment) {
             "${this::class.java.simpleName} ${this::class.java.hashCode()} onCreate: "
         );
         viewModel = ViewModelProvider(this).get(SettingsViewModel::class.java)
-        viewModel.prefs = PrefsStorage(requireActivity().applicationContext)
         Log.d(
             "APP_TAG",
             "${this::class.java.simpleName} ${this::class.java.hashCode()} onActivityCreated: "
@@ -50,10 +49,10 @@ class SettingsFragment : Fragment(R.layout.settings_fragment) {
         binding = SettingsFragmentBinding.bind(view)
         binding?.apply {
             generateAuth.setOnClickListener {
-                viewModel.generateAuth(
-                    apiKey = etApiKey.text.toString(),
-                    token = etToken.text.toString()
-                )
+//                viewModel.generateAuth(
+//                    apiKey = etApiKey.text.toString(),
+//                    token = etToken.text.toString()
+//                )
             }
         }
         vmBinds.addAll(

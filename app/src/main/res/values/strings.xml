@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">Planfix Scan</string>
 
+    <string name="frag_chooser_to_products">Отсканировать продукты</string>
+    <string name="frag_chooser_to_stages">Отправить статус</string>
+
     <string name="setting_api_key_hint">Api Key</string>
     <string name="setting_token_hint">Token</string>
     <string name="setting_generate_auth">Создать код аутентификации</string>

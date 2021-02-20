@@ -8,16 +8,4 @@ class SettingsViewModel : ViewModel() {
 
     val authSubject = BehaviorSubject.create<String>()
     val sidSubject = BehaviorSubject.create<String>()
-
-    var prefs: IPrefsStorage? = null
-    set(value) {
-        field = value
-        authSubject.onNext(field?.authHeader)
-        sidSubject.onNext(field?.sid)
-    }
-
-    fun generateAuth(apiKey: String, token: String){
-        prefs?.generateAuth(apiKey, token)
-        authSubject.onNext(prefs?.authHeader?:"null")
-    }
 }

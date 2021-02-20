@@ -11,9 +11,10 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable
 import ru.nds.planfix.scan.CodeScannedListener
 import ru.nds.planfix.scan.MainActivity
 import ru.nds.planfix.scan.R
-import ru.nds.planfix.scan.SettingsQrScannedListener
 import ru.nds.planfix.scan.data.PrefsStorage
+import ru.nds.planfix.scan.data.ProductsPrefs
 import ru.nds.planfix.scan.databinding.MainFragmentBinding
+import ru.nds.planfix.scan.ui.scanner.ScannerFragment
 
 class CodesFragment : Fragment() {
 
@@ -28,13 +29,6 @@ class CodesFragment : Fragment() {
         }
     }
 
-    private val settingsQrScannedListener = object : SettingsQrScannedListener {
-        override fun onSettingsQrScanned(configJson: String) {
-            viewModel.onSettingsQrScanned(configJson)
-        }
-
-    }
-
     private var binding: MainFragmentBinding? = null
 
     private val vmBinds = CompositeDisposable()
@@ -46,7 +40,6 @@ class CodesFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         (activity as? MainActivity)?.codeScannedListener = codeScannedListener
-        (activity as? MainActivity)?.settingsQrScannedListener = settingsQrScannedListener
     }
 
     override fun onCreateView(
@@ -59,7 +52,7 @@ class CodesFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(CodesViewModel::class.java)
-        viewModel.prefs = PrefsStorage(requireActivity().applicationContext)
+        viewModel.prefs = ProductsPrefs(requireActivity().applicationContext)
         vmBinds.addAll(
             viewModel.codeParsedSubject.subscribe {
                 (activity as? MainActivity)?.codesList?.apply {
@@ -84,12 +77,21 @@ class CodesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding = MainFragmentBinding.bind(view)
         binding?.codes?.adapter = codesAdapter
-        binding?.scan?.setOnClickListener { (activity as? MainActivity)?.openScanner() }
+        binding?.scan?.setOnClickListener { openScanner() }
         binding?.send?.setOnClickListener {
             (activity as? MainActivity)?.codesList?.also {
                 viewModel.sendParsingToPlanFix(it)
             }
         }
+    }
+
+
+
+    private fun openScanner() {
+        parentFragmentManager.beginTransaction()
+            .addToBackStack("openScanner")
+            .replace(R.id.container, ScannerFragment.newInstance(), ScannerFragment.TAG)
+            .commit()
     }
 
     override fun onResume() {
@@ -107,7 +109,6 @@ class CodesFragment : Fragment() {
 
     override fun onDestroy() {
         (activity as? MainActivity)?.codeScannedListener = null
-        (activity as? MainActivity)?.settingsQrScannedListener = null
         vmBinds.dispose()
         super.onDestroy()
     }

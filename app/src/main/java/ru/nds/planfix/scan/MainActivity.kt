@@ -9,25 +9,56 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import ru.nds.planfix.scan.data.PrefsStorage
+import androidx.lifecycle.ViewModelProvider
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import ru.nds.planfix.scan.data.ProductsPrefs
+import ru.nds.planfix.scan.data.StagesPrefs
 import ru.nds.planfix.scan.models.CodeModel
+import ru.nds.planfix.scan.ui.chooser.ChooserFragment
 import ru.nds.planfix.scan.ui.codes.CodesFragment
-import ru.nds.planfix.scan.ui.scanner.ScannerFragment
 import ru.nds.planfix.scan.ui.settingsScan.ScanSettingsQrFragment
+import ru.nds.planfix.scan.ui.settingsScan.ScanSettingsQrFragment.Companion.SETTINGS_PRODUCTS
+import ru.nds.planfix.scan.ui.settingsScan.ScanSettingsQrFragment.Companion.SETTINGS_STAGES
 import java.text.SimpleDateFormat
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
+    private val vmBinds = CompositeDisposable()
+    val codesList: MutableList<CodeModel> = mutableListOf()
 
+    private lateinit var viewModel: MainActivityViewModel
     var codeScannedListener: CodeScannedListener? = null
-    var settingsQrScannedListener: SettingsQrScannedListener? = null
+    var settingsQrScannedListener = object : SettingsQrScannedListener {
+        override fun onProductSettingsQrScanned(configJson: String) {
+            viewModel.onProductSettingsQrScanned(configJson)
+        }
+
+        override fun onStagesSettingQrScanned(configJson: String) {
+            viewModel.onStagesSettingQrScanned(configJson)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        initVm()
         setContentView(R.layout.main_activity)
         if (savedInstanceState == null) {
             startMainFlow()
         }
+        vmBinds.addAll(
+            viewModel.actionSuccessSubject.subscribe {
+                Toast.makeText(this, "Успешно", Toast.LENGTH_SHORT).show()
+            },
+            viewModel.actionFailSubject.subscribe { error ->
+                Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
+            }
+        )
+    }
+
+    private fun initVm() {
+        viewModel = ViewModelProvider(this).get(MainActivityViewModel::class.java)
+        viewModel.productPrefs = ProductsPrefs(this)
+        viewModel.stagesPrefs = StagesPrefs(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -37,8 +68,12 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean =
         when (item.itemId) {
-            R.id.menu_settings -> {
-                openSettings()
+            R.id.menu_settings_product -> {
+                openSettings(SETTINGS_PRODUCTS)
+                true
+            }
+            R.id.menu_settings_stages -> {
+                openSettings(SETTINGS_STAGES)
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -46,7 +81,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun startMainFlow() {
         if (checkExpired()) {
-            YandexMetricaActions.onCompanyExpired(PrefsStorage(this).account)
+            YandexMetricaActions.onCompanyExpired(ProductsPrefs(this).account)
             Toast.makeText(
                 this,
                 "Истек срок пробной версии, обратитесь к администратору",
@@ -66,7 +101,7 @@ class MainActivity : AppCompatActivity() {
             )
         } else {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.container, CodesFragment.newInstance(), CodesFragment.TAG)
+                .replace(R.id.container, ChooserFragment.newInstance(), CodesFragment.TAG)
                 .commitNow()
         }
     }
@@ -96,24 +131,14 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    //    val codesList = generateFakeCodes().toMutableList()
-    val codesList: MutableList<CodeModel> = mutableListOf()
-
-    fun openScanner() {
+    private fun openSettings(settingsType: Int) {
         supportFragmentManager.beginTransaction()
-            .hide(supportFragmentManager.findFragmentByTag(CodesFragment.TAG)!!)
-            .add(R.id.container, ScannerFragment.newInstance(), ScannerFragment.TAG)
-//            .replace(R.id.container, ScannerFragment.newInstance(), ScannerFragment.TAG)
-            .addToBackStack(OPEN_SCANNER_TAG)
-            .commit()
-    }
-
-    fun openSettings() {
-        supportFragmentManager.beginTransaction()
-            .hide(supportFragmentManager.findFragmentByTag(CodesFragment.TAG)!!)
-            .add(R.id.container, ScanSettingsQrFragment.newInstance(), ScanSettingsQrFragment.TAG)
-//            .replace(R.id.container, ScannerFragment.newInstance(), ScannerFragment.TAG)
-            .addToBackStack(OPEN_SETTINGS_TAG)
+            .addToBackStack("openSettings")
+            .replace(
+                R.id.container,
+                ScanSettingsQrFragment.newInstance(settingsType),
+                ScanSettingsQrFragment.TAG
+            )
             .commit()
     }
 
@@ -135,5 +160,6 @@ interface CodeScannedListener {
 }
 
 interface SettingsQrScannedListener {
-    fun onSettingsQrScanned(configJson: String)
+    fun onProductSettingsQrScanned(configJson: String)
+    fun onStagesSettingQrScanned(configJson: String)
 }
