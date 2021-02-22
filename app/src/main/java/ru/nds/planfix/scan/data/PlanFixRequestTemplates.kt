@@ -13,6 +13,6 @@ object PlanFixRequestTemplates {
     const val XML_GET_STAGES =
         "<request method=\"handbook.getRecords\"><account>radix</account><sid>d1790e602aa175313bc1da03009abf3b</sid><handbook><id>13108</id></handbook></request>"
     const val XML_SEND_STAGE_TEMPLATE =
-        "<request method=\"action.add\"><account>radix</account><sid>87c42ae316cdf1c2bf7205192143a07f</sid><action><description>Запись из Приложения</description><task><id>5204432</id></task><analitics><analitic><id>10752</id><analiticData><itemData><fieldId>45846</fieldId><value>1437056</value></itemData><itemData><fieldId>45146</fieldId><value>2</value></itemData><itemData><fieldId>45148</fieldId><value>01-02-2021</value></itemData></analiticData></analitic></analitics></action></request>"
+        "<request method=\"action.add\"><account>%1\$s</account><sid>%2\$s</sid><action><description>Запись из Приложения %3\$s</description><task><id>%4\$s</id></task><analitics><analitic><id>%5\$s</id><analiticData><itemData><fieldId>%6\$s</fieldId><value>%7\$s</value></itemData><itemData><fieldId>%8\$s</fieldId><value>%9\$s</value></itemData><itemData><fieldId>%10\$s</fieldId><value>%11\$s</value></itemData></analiticData></analitic></analitics></action></request>"
 
 }

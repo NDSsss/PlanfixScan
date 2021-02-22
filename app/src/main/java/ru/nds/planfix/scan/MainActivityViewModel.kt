@@ -73,6 +73,7 @@ class MainActivityViewModel : ViewModel() {
             analyticId = settingsJson.analiticId
             fieldOneId = settingsJson.contactIdFieldId
             fieldTwoId = settingsJson.stageTypeFieldId
+            fieldThreeId = settingsJson.dateFieldId
         }
     }
 

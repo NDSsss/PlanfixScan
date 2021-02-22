@@ -14,6 +14,7 @@ interface IPrefsStorage {
     var analyticId: String
     var fieldOneId: String
     var fieldTwoId: String
+    var fieldThreeId: String
     var contactId: String
 }
 
@@ -98,6 +99,12 @@ open class PrefsStorage(
             prefs.writeString(FIELD_TWO_ID, value)
         }
 
+    override var fieldThreeId: String
+        get() = prefs.getStringOrEmpty(FIELD_THREE_ID)
+        set(value) {
+            prefs.writeString(FIELD_THREE_ID, value)
+        }
+
     private fun SharedPreferences.getStringOrEmpty(name: String) = getString(name, "") ?: ""
     private fun SharedPreferences.writeString(name: String, value: String) {
         this.edit().putString(name, value).apply()
@@ -113,6 +120,7 @@ open class PrefsStorage(
         private const val CONTACT_ID = "CONTACT_ID"
         private const val FIELD_ONE_ID = "FIELD_ONE_ID"
         private const val FIELD_TWO_ID = "FIELD_TWO_ID"
+        private const val FIELD_THREE_ID = "FIELD_THREE_ID"
     }
 
 }

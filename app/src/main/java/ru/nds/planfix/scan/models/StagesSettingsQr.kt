@@ -11,4 +11,5 @@ data class StagesSettingsQr(
     val analiticId: String,
     val stageTypeFieldId: String,
     val contactIdFieldId: String,
+    val dateFieldId: String,
 )

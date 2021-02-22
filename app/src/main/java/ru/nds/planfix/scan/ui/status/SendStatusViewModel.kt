@@ -14,6 +14,8 @@ import ru.nds.planfix.scan.data.PlanFixRequestTemplates
 import ru.nds.planfix.scan.di.NetworkObjectsHolder
 import ru.nds.planfix.scan.models.HandbookRecord
 import ru.nds.planfix.scan.models.parseHandbookRecords
+import java.text.SimpleDateFormat
+import java.util.*
 
 class SendStatusViewModel : ViewModel() {
 
@@ -55,7 +57,22 @@ class SendStatusViewModel : ViewModel() {
     }
 
     fun sendStatus(position: Int) {
-        val formattedBody = PlanFixRequestTemplates.XML_SEND_STAGE_TEMPLATE
+        val stageKey = stagesSubject.value[position].customData[1].value
+        val format = SimpleDateFormat("dd-MM-yyyy")
+        val nnPrefs = stagesPrefs ?: return
+        val formattedBody = PlanFixRequestTemplates.XML_SEND_STAGE_TEMPLATE.format(
+            nnPrefs.account,
+            nnPrefs.sid,
+            nnPrefs.userLogin,
+            nnPrefs.taskId,
+            nnPrefs.analyticId,
+            nnPrefs.fieldOneId,
+            nnPrefs.contactId,
+            nnPrefs.fieldTwoId,
+            stageKey,
+            nnPrefs.fieldThreeId,
+            format.format(Calendar.getInstance().time)
+        ).replace("\\n", "")
         val requestBody = RequestBody.create("text/plain".toMediaType(), formattedBody)
         val authHeader = "Basic ${stagesPrefs?.authHeader}"
         requests.add(
