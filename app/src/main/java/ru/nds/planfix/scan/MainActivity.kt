@@ -107,7 +107,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun checkExpired(): Boolean {
-        val expiredDate = "09/03/2021"
+        val expiredDate = "21/03/2021"
         val format = SimpleDateFormat("dd/MM/yyyy")
         return Date().after(format.parse(expiredDate))
     }

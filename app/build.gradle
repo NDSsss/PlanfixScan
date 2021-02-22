@@ -11,8 +11,8 @@ android {
         applicationId "ru.nds.planfix.scan"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 3
-        versionName "alpha_0.0.3"
+        versionCode 4
+        versionName "alpha_0.0.4"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
