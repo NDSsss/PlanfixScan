@@ -1,4 +1,4 @@
-package ru.nds.planfix.scan.ui.codes
+package ru.nds.planfix.scan.ui.products
 
 import android.view.LayoutInflater
 import android.view.View
@@ -9,8 +9,10 @@ import ru.nds.planfix.scan.R
 import ru.nds.planfix.scan.databinding.ItemCodeBinding
 import ru.nds.planfix.scan.models.CodeModel
 
-class CodesAdapter : RecyclerView.Adapter<CodeVh>() {
-    var codes: MutableList<CodeModel> = mutableListOf()
+class CodesAdapter(
+    private val codeDeleteListener: ICodeDeleteListener
+) : RecyclerView.Adapter<CodeVh>() {
+    var codes: List<CodeModel> = listOf()
         set(value) {
             field = value
             notifyDataSetChanged()
@@ -20,12 +22,7 @@ class CodesAdapter : RecyclerView.Adapter<CodeVh>() {
         CodeVh(LayoutInflater.from(parent.context).inflate(R.layout.item_code, parent, false))
 
     override fun onBindViewHolder(holder: CodeVh, position: Int) {
-        holder.bindCode(code = codes[position], object : CodeVh.ICodeDeleteListener {
-            override fun onCodeDelete(position: Int) {
-                codes.removeAt(position)
-                notifyDataSetChanged()
-            }
-        })
+        holder.bindCode(code = codes[position], codeDeleteListener)
     }
 
     override fun getItemCount(): Int = codes.size
@@ -38,11 +35,11 @@ class CodeVh(view: View) : RecyclerView.ViewHolder(view) {
         binding.price.setText(code.price.toString())
         binding.price.doAfterTextChanged { code.price = it.toString().toIntOrNull() ?: 0 }
         binding.delete.setOnClickListener {
-            codeDeleteListener.onCodeDelete(adapterPosition)
+            codeDeleteListener.onProductDelete(adapterPosition)
         }
     }
+}
 
-    interface ICodeDeleteListener {
-        fun onCodeDelete(position: Int)
-    }
+interface ICodeDeleteListener {
+    fun onProductDelete(position: Int)
 }

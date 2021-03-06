@@ -10,7 +10,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.zxing.Result
 import me.dm7.barcodescanner.zxing.ZXingScannerView
-import ru.nds.planfix.scan.MainActivity
+import org.koin.android.viewmodel.ext.android.viewModel
+import ru.nds.planfix.scan.ui.main.MainActivity
 import ru.nds.planfix.scan.R
 import ru.nds.planfix.scan.databinding.ScanerFragmentBinding
 
@@ -21,32 +22,22 @@ class ScannerFragment : Fragment() {
         fun newInstance() = ScannerFragment()
     }
 
-    private val scanHandler = object : ZXingScannerView.ResultHandler {
-        override fun handleResult(rawResult: Result?) {
-            Log.d(
-                "APP_TAG",
-                "${this::class.java.simpleName} ${this::class.java.hashCode()} rawResult: $rawResult"
-            );
-            Toast.makeText(requireContext(), rawResult.toString(), Toast.LENGTH_SHORT).show();
-            (activity as? MainActivity)?.codeScannedListener?.onCodeScanned(rawResult?.text ?: "")
-            requireActivity().supportFragmentManager.popBackStack()
-        }
+    private val scanHandler = ZXingScannerView.ResultHandler { rawResult ->
+        viewModel.handleResult(rawResult)
+//            Toast.makeText(requireContext(), rawResult.toString(), Toast.LENGTH_SHORT).show();
+//            (activity as? MainActivity)?.codeScannedListener?.onCodeScanned(rawResult?.text ?: "")
+//            requireActivity().supportFragmentManager.popBackStack()
     }
 
     private var binding: ScanerFragmentBinding? = null
 
-    private lateinit var viewModel: ScannerViewModel
+    private val viewModel: ScannerViewModel by viewModel<ScannerViewModelImpl>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.scaner_fragment, container, false)
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(ScannerViewModel::class.java)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

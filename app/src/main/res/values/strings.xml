@@ -1,6 +1,12 @@
 <resources>
     <string name="app_name">Planfix Scan</string>
 
+    <string name="notification_success">Успешно</string>
+
+    <string name="error_sid_fetch">Ошибка получения sid</string>
+    <string name="error_send_data_to_planfix">Ошибка отправки данных в Planfix</string>
+    <string name="error_barcode_parsing">Ошибка парсинга штрих-кода</string>
+
     <string name="frag_chooser_to_products">Отсканировать продукты</string>
     <string name="frag_chooser_to_stages">Отправить статус</string>
 

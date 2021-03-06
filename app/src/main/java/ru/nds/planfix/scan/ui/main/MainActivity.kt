@@ -1,4 +1,4 @@
-package ru.nds.planfix.scan
+package ru.nds.planfix.scan.ui.main
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -9,13 +9,11 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModelProvider
-import io.reactivex.rxjava3.disposables.CompositeDisposable
+import org.koin.android.viewmodel.ext.android.viewModel
+import ru.nds.planfix.scan.R
+import ru.nds.planfix.scan.YandexMetricaActions
 import ru.nds.planfix.scan.data.ProductsPrefs
-import ru.nds.planfix.scan.data.StagesPrefs
 import ru.nds.planfix.scan.models.CodeModel
-import ru.nds.planfix.scan.ui.chooser.ChooserFragment
-import ru.nds.planfix.scan.ui.codes.CodesFragment
 import ru.nds.planfix.scan.ui.settingsScan.ScanSettingsQrFragment
 import ru.nds.planfix.scan.ui.settingsScan.ScanSettingsQrFragment.Companion.SETTINGS_PRODUCTS
 import ru.nds.planfix.scan.ui.settingsScan.ScanSettingsQrFragment.Companion.SETTINGS_STAGES
@@ -23,10 +21,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
-    private val vmBinds = CompositeDisposable()
-    val codesList: MutableList<CodeModel> = mutableListOf()
 
-    private lateinit var viewModel: MainActivityViewModel
+    private val viewModel: MainActivityViewModel by viewModel<MainActivityViewModelImpl>()
     var codeScannedListener: CodeScannedListener? = null
     var settingsQrScannedListener = object : SettingsQrScannedListener {
         override fun onProductSettingsQrScanned(configJson: String) {
@@ -40,25 +36,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        initVm()
         setContentView(R.layout.main_activity)
         if (savedInstanceState == null) {
             startMainFlow()
         }
-        vmBinds.addAll(
-            viewModel.actionSuccessSubject.subscribe {
-                Toast.makeText(this, "Успешно", Toast.LENGTH_SHORT).show()
-            },
-            viewModel.actionFailSubject.subscribe { error ->
-                Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
-            }
-        )
-    }
-
-    private fun initVm() {
-        viewModel = ViewModelProvider(this).get(MainActivityViewModel::class.java)
-        viewModel.productPrefs = ProductsPrefs(this)
-        viewModel.stagesPrefs = StagesPrefs(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -100,10 +81,20 @@ class MainActivity : AppCompatActivity() {
                 REQUEST_CAMERA_PERMISSION
             )
         } else {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.container, ChooserFragment.newInstance(), CodesFragment.TAG)
-                .commitNow()
+            viewModel.openChooser()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.setFragmentManager(supportFragmentManager)
+        viewModel.setActivity(this)
+    }
+
+    override fun onPause() {
+        viewModel.removeFragmentManager()
+        viewModel.removeActivity()
+        super.onPause()
     }
 
     private fun checkExpired(): Boolean {

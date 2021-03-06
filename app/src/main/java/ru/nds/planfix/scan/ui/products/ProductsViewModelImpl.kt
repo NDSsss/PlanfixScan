@@ -1,14 +1,16 @@
-package ru.nds.planfix.scan.ui.codes
+package ru.nds.planfix.scan.ui.products
 
 import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
-import io.reactivex.rxjava3.subjects.PublishSubject
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody
+import ru.nds.planfix.scan.R
 import ru.nds.planfix.scan.YandexMetricaActions
+import ru.nds.planfix.scan.appResources.AppResources
 import ru.nds.planfix.scan.data.IPrefsStorage
 import ru.nds.planfix.scan.data.PlanFixRequestTemplates.BARCODE_PARSE_URL
 import ru.nds.planfix.scan.data.PlanFixRequestTemplates.PLANFIX_API_URL
@@ -16,20 +18,21 @@ import ru.nds.planfix.scan.data.PlanFixRequestTemplates.XML_REQUEST_TEMPLATE
 import ru.nds.planfix.scan.di.NetworkObjectsHolder
 import ru.nds.planfix.scan.models.CodeModel
 import ru.nds.planfix.scan.models.toCodeModel
+import ru.nds.planfix.scan.ui.notifications.NotificationsManager
+import ru.nds.planfix.scan.ui.scanner.ScannerViewModelImpl
 
-class CodesViewModel : ViewModel() {
-
-    val codeParsedSubject: PublishSubject<CodeModel> = PublishSubject.create()
-
-    val actionSuccessSubject = PublishSubject.create<Unit>()
-    val actionFailSubject = PublishSubject.create<String>()
-    val clearCodesSubject = PublishSubject.create<Unit>()
-
-    var prefs: IPrefsStorage? = null
+class ProductsViewModelImpl(
+    val prefs: IPrefsStorage,
+    private val productsCoordinator: ProductsCoordinator,
+    private val appResources: AppResources,
+    private val notificationsManager: NotificationsManager,
+) : ViewModel(), ProductsViewModel {
 
     private val requests = CompositeDisposable()
 
-    fun onCodeScanned(code: String) {
+    override val productsList = MutableLiveData<List<CodeModel>>(listOf())
+
+    override fun onCodeScanned(code: String) {
         requests.add(
             NetworkObjectsHolder.barcodeParseApi.parseBarcode(
                 BARCODE_PARSE_URL,
@@ -40,9 +43,9 @@ class CodesViewModel : ViewModel() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     { parsedCode ->
-                        codeParsedSubject.onNext(parsedCode)
+                        onCodeParsed(parsedCode)
                         YandexMetricaActions.onProductScanned(
-                            prefs!!,
+                            prefs,
                             code,
                             parsedCode.toParsedResult()
                         )
@@ -51,14 +54,15 @@ class CodesViewModel : ViewModel() {
                             "APP_TAG",
                             "${this::class.java.simpleName} ${this::class.java.hashCode()} parse error : ${it.message}"
                         );
-                        YandexMetricaActions.onProductScanned(prefs!!, code, "Ошибка ${it.message}")
-                        actionFailSubject.onNext("Ошибка парсинга штрих-кода")
+                        YandexMetricaActions.onProductScanned(prefs, code, "Ошибка ${it.message}")
+                        notificationsManager.showNotification(appResources.getString(R.string.error_barcode_parsing))
                     }
                 )
         )
     }
 
-    fun sendParsingToPlanFix(codes: MutableList<CodeModel>) {
+    override fun sendParsingToPlanFix() {
+        val codes: List<CodeModel> = listOf()
         val parsingResult = "[${
             codes.joinToString(
                 separator = "\u0022,\u0022",
@@ -81,7 +85,7 @@ class CodesViewModel : ViewModel() {
             parsingResult
         ).replace("\\n", "")
 
-        YandexMetricaActions.onProductsSent(prefs!!, formattedBody)
+        YandexMetricaActions.onProductsSent(prefs, formattedBody)
         Log.d(
             "APP_TAG",
             "${this::class.java.simpleName} ${this::class.java.hashCode()} formattedBody: $formattedBody"
@@ -102,17 +106,42 @@ class CodesViewModel : ViewModel() {
                             "APP_TAG",
                             "${this::class.java.simpleName} ${this::class.java.hashCode()} sendParsingToPlanFix: success"
                         );
-                        actionSuccessSubject.onNext(Unit)
-                        clearCodesSubject.onNext(Unit)
+                        notificationsManager.showNotification(appResources.getString(R.string.notification_success))
+                        clearCodes()
+                        productsCoordinator.back()
                     }, {
                         Log.d(
                             "APP_TAG",
                             "${this::class.java.simpleName} ${this::class.java.hashCode()} sendParsingToPlanFix: error"
                         );
-                        actionFailSubject.onNext("Ошибка отправки данных в Planfix")
+                        notificationsManager.showNotification(appResources.getString(R.string.error_send_data_to_planfix))
                     }
                 )
         )
+    }
+
+    private fun clearCodes() {
+        productsList.value = listOf()
+    }
+
+    private fun onCodeParsed(product: CodeModel) {
+        val currentProductsList =
+            (productsList.value ?: throw NullPointerException("codes must be initialized"))
+        productsList.value = currentProductsList.plus(product)
+    }
+
+    override fun openScanner() {
+        requests.add(
+            productsCoordinator.addResultListener<String>(ScannerViewModelImpl.CODE_SCANNED_RESULT)
+                .subscribe { onCodeScanned(it) }
+        )
+        productsCoordinator.openScanner()
+    }
+
+    override fun onProductDelete(position: Int) {
+        val currentProductsList =
+            (productsList.value ?: throw NullPointerException("codes must be initialized"))
+        productsList.value = currentProductsList.filterIndexed { index, _ -> index != position }
     }
 
     override fun onCleared() {

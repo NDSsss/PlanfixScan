@@ -1,32 +1,62 @@
-package ru.nds.planfix.scan
+package ru.nds.planfix.scan.ui.main
 
+import android.app.Activity
 import android.util.Log
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
-import io.reactivex.rxjava3.subjects.PublishSubject
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
+import ru.nds.planfix.scan.R
+import ru.nds.planfix.scan.YandexMetricaActions
+import ru.nds.planfix.scan.appResources.AppResources
 import ru.nds.planfix.scan.data.IPrefsStorage
 import ru.nds.planfix.scan.data.PlanFixRequestTemplates
 import ru.nds.planfix.scan.data.SidResponse
 import ru.nds.planfix.scan.di.NetworkObjectsHolder
 import ru.nds.planfix.scan.models.ProductSettingsQr
 import ru.nds.planfix.scan.models.StagesSettingsQr
+import ru.nds.planfix.scan.ui.navigation.MainCoordinator
+import ru.nds.planfix.scan.ui.navigation.SetUpCoordinator
+import ru.nds.planfix.scan.ui.notifications.NotificationsManager
+import ru.nds.planfix.scan.ui.notifications.NotificationsManagerSetUp
 
-class MainActivityViewModel : ViewModel() {
+class MainActivityViewModelImpl(
+    private val notificationsManagerSetUp: NotificationsManagerSetUp,
+    private val notificationsManager: NotificationsManager,
+    private val setUpCoordinator: SetUpCoordinator,
+    private val mainCoordinator: MainCoordinator,
+    private val productPrefs: IPrefsStorage,
+    private val stagesPrefs: IPrefsStorage,
+    private val appResources: AppResources,
+) : ViewModel(), MainActivityViewModel {
 
-    var productPrefs: IPrefsStorage? = null
-    var stagesPrefs: IPrefsStorage? = null
+    override fun setFragmentManager(fm: FragmentManager) {
+        setUpCoordinator.setFragmentManager(fm)
+    }
+
+    override fun removeFragmentManager() {
+        setUpCoordinator.removeFragmentManager()
+    }
+
+    override fun openChooser() {
+        mainCoordinator.openChooser()
+    }
+
+    override fun setActivity(activity: Activity) {
+        notificationsManagerSetUp.setActivity(activity)
+    }
+
+    override fun removeActivity() {
+        notificationsManagerSetUp.removeActivity()
+    }
 
     private val requests = CompositeDisposable()
 
-    val actionSuccessSubject = PublishSubject.create<Unit>()
-    val actionFailSubject = PublishSubject.create<String>()
-
-    fun onProductSettingsQrScanned(configJson: String) {
+    override fun onProductSettingsQrScanned(configJson: String) {
         YandexMetricaActions.onSettingsScanned(configJson)
         val settingsJson =
             NetworkObjectsHolder.gson.fromJson(configJson, ProductSettingsQr::class.java)
@@ -50,7 +80,7 @@ class MainActivityViewModel : ViewModel() {
         }
     }
 
-    fun onStagesSettingQrScanned(configJson: String) {
+    override fun onStagesSettingQrScanned(configJson: String) {
         YandexMetricaActions.onSettingsScanned(configJson)
         val settingsJson =
             NetworkObjectsHolder.gson.fromJson(configJson, StagesSettingsQr::class.java)
@@ -115,10 +145,10 @@ class MainActivityViewModel : ViewModel() {
                         when (settingType) {
                             SettingType.PRODUCT -> productPrefs
                             SettingType.STAGES -> stagesPrefs
-                        }?.sid = sid.sid
-                        actionSuccessSubject.onNext(Unit)
+                        }.sid = sid.sid
+                        notificationsManager.showNotification(appResources.getString(R.string.notification_success))
                     }, {
-                        actionFailSubject.onNext("Ошибка получения sid")
+                        notificationsManager.showNotification(appResources.getString(R.string.error_sid_fetch))
                     }
                 )
         )
@@ -144,4 +174,5 @@ class MainActivityViewModel : ViewModel() {
         PRODUCT,
         STAGES
     }
+
 }

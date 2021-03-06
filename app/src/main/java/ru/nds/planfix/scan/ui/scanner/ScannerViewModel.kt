@@ -1,7 +1,7 @@
 package ru.nds.planfix.scan.ui.scanner
 
-import androidx.lifecycle.ViewModel
+import com.google.zxing.Result
 
-class ScannerViewModel : ViewModel() {
-    // TODO: Implement the ViewModel
+interface ScannerViewModel {
+    fun handleResult(rawResult: Result?)
 }
