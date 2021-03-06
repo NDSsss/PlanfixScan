@@ -13,7 +13,6 @@ import org.koin.android.viewmodel.ext.android.viewModel
 import ru.nds.planfix.scan.R
 import ru.nds.planfix.scan.YandexMetricaActions
 import ru.nds.planfix.scan.data.ProductsPrefs
-import ru.nds.planfix.scan.models.CodeModel
 import ru.nds.planfix.scan.ui.settingsScan.ScanSettingsQrFragment
 import ru.nds.planfix.scan.ui.settingsScan.ScanSettingsQrFragment.Companion.SETTINGS_PRODUCTS
 import ru.nds.planfix.scan.ui.settingsScan.ScanSettingsQrFragment.Companion.SETTINGS_STAGES

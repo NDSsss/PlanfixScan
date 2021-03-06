@@ -6,9 +6,9 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import com.google.zxing.Result
 import me.dm7.barcodescanner.zxing.ZXingScannerView
-import ru.nds.planfix.scan.ui.main.MainActivity
 import ru.nds.planfix.scan.R
 import ru.nds.planfix.scan.databinding.FragmentScanSettingsQrBinding
+import ru.nds.planfix.scan.ui.main.MainActivity
 
 class ScanSettingsQrFragment : Fragment(R.layout.fragment_scan_settings_qr) {
 
@@ -20,7 +20,7 @@ class ScanSettingsQrFragment : Fragment(R.layout.fragment_scan_settings_qr) {
             Log.d(
                 "APP_TAG",
                 "${this::class.java.simpleName} ${this::class.java.hashCode()} settings scan result: $rawResult"
-            );
+            )
             when (arguments?.getInt(SETTINGS_TYPE_PARAM, -1)) {
                 SETTINGS_PRODUCTS -> (activity as? MainActivity)?.settingsQrScannedListener?.onProductSettingsQrScanned(
                     rawResult?.text ?: ""

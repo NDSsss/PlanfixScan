@@ -8,6 +8,7 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import ru.nds.planfix.scan.R
 import ru.nds.planfix.scan.YandexMetricaActions
 import ru.nds.planfix.scan.appResources.AppResources
@@ -53,7 +54,7 @@ class ProductsViewModelImpl(
                         Log.d(
                             "APP_TAG",
                             "${this::class.java.simpleName} ${this::class.java.hashCode()} parse error : ${it.message}"
-                        );
+                        )
                         YandexMetricaActions.onProductScanned(prefs, code, "Ошибка ${it.message}")
                         notificationsManager.showNotification(appResources.getString(R.string.error_barcode_parsing))
                     }
@@ -70,11 +71,11 @@ class ProductsViewModelImpl(
                 postfix = "\u0022"
             ) { it.toParsedResult() }
         }]"
-        val nnPrefs = prefs ?: return
+        val nnPrefs = prefs
         Log.d(
             "APP_TAG",
             "${this::class.java.simpleName} ${this::class.java.hashCode()} parsingResult: $parsingResult"
-        );
+        )
         val formattedBody = XML_REQUEST_TEMPLATE.format(
             nnPrefs.account,
             nnPrefs.sid,
@@ -89,9 +90,9 @@ class ProductsViewModelImpl(
         Log.d(
             "APP_TAG",
             "${this::class.java.simpleName} ${this::class.java.hashCode()} formattedBody: $formattedBody"
-        );
-        val requestBody = RequestBody.create("text/plain".toMediaType(), formattedBody)
-        val authHeader = "Basic ${prefs?.authHeader}"
+        )
+        val requestBody = formattedBody.toRequestBody("text/plain".toMediaType())
+        val authHeader = "Basic ${prefs.authHeader}"
         requests.add(
             NetworkObjectsHolder.barcodeParseApi.sendParsingToPlanFix(
                 url = PLANFIX_API_URL,
@@ -105,7 +106,7 @@ class ProductsViewModelImpl(
                         Log.d(
                             "APP_TAG",
                             "${this::class.java.simpleName} ${this::class.java.hashCode()} sendParsingToPlanFix: success"
-                        );
+                        )
                         notificationsManager.showNotification(appResources.getString(R.string.notification_success))
                         clearCodes()
                         productsCoordinator.back()
@@ -113,7 +114,7 @@ class ProductsViewModelImpl(
                         Log.d(
                             "APP_TAG",
                             "${this::class.java.simpleName} ${this::class.java.hashCode()} sendParsingToPlanFix: error"
-                        );
+                        )
                         notificationsManager.showNotification(appResources.getString(R.string.error_send_data_to_planfix))
                     }
                 )

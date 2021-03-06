@@ -24,7 +24,7 @@ data class Field(
     var id: String? = null
 )
 
-fun Response<ResponseBody>.parseHandbookRecords():List<HandbookRecord>{
+fun Response<ResponseBody>.parseHandbookRecords(): List<HandbookRecord> {
     val rawResponse = this.body()?.byteStream()?.readBytes()?.decodeToString() ?: ""
     val parser: XmlPullParser = XmlPullParserFactory.newInstance().newPullParser()
     parser.setInput(
@@ -34,7 +34,7 @@ fun Response<ResponseBody>.parseHandbookRecords():List<HandbookRecord>{
     return parser.parseHandbookRecords()
 }
 
-fun XmlPullParser.parseHandbookRecords():List<HandbookRecord>{
+fun XmlPullParser.parseHandbookRecords(): List<HandbookRecord> {
 
     var lastTag = ""
 
@@ -44,11 +44,11 @@ fun XmlPullParser.parseHandbookRecords():List<HandbookRecord>{
     var currentCustomValue = CustomValue()
     var currentField = Field()
 
-    while (eventType != XmlPullParser.END_DOCUMENT){
-        when(eventType){
-            XmlPullParser.START_TAG ->{
+    while (eventType != XmlPullParser.END_DOCUMENT) {
+        when (eventType) {
+            XmlPullParser.START_TAG -> {
                 lastTag = name
-                when(name){
+                when (name) {
                     "records" -> allRecords = mutableListOf()
                     "record" -> currentRecord = HandbookRecord()
                     "customData" -> customValues = mutableListOf()
@@ -57,14 +57,14 @@ fun XmlPullParser.parseHandbookRecords():List<HandbookRecord>{
                 }
             }
             XmlPullParser.TEXT -> {
-                when(lastTag){
-                    "id"-> currentField = Field(text)
-                    "value"-> currentCustomValue.value = text
-                    "text"-> currentCustomValue.text = text
+                when (lastTag) {
+                    "id" -> currentField = Field(text)
+                    "value" -> currentCustomValue.value = text
+                    "text" -> currentCustomValue.text = text
                 }
             }
             XmlPullParser.END_TAG -> {
-                when(name){
+                when (name) {
                     "field" -> currentCustomValue.field = currentField
                     "customValue" -> customValues.add(currentCustomValue)
                     "customData" -> currentRecord.customData = customValues

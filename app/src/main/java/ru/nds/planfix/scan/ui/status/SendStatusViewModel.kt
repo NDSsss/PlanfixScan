@@ -9,6 +9,7 @@ import io.reactivex.rxjava3.subjects.BehaviorSubject
 import io.reactivex.rxjava3.subjects.PublishSubject
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import ru.nds.planfix.scan.data.IPrefsStorage
 import ru.nds.planfix.scan.data.PlanFixRequestTemplates
 import ru.nds.planfix.scan.di.NetworkObjectsHolder
@@ -33,7 +34,7 @@ class SendStatusViewModel : ViewModel() {
 
     private fun loadStages() {
         val formattedBody = PlanFixRequestTemplates.XML_GET_STAGES
-        val requestBody = RequestBody.create("text/plain".toMediaType(), formattedBody)
+        val requestBody = formattedBody.toRequestBody("text/plain".toMediaType())
         val authHeader = "Basic ${stagesPrefs?.authHeader}"
         requests.add(
             NetworkObjectsHolder.barcodeParseApi.sendParsingToPlanFix(
@@ -50,7 +51,7 @@ class SendStatusViewModel : ViewModel() {
                         Log.d(
                             "APP_TAG",
                             "${this::class.java.simpleName} ${this::class.java.hashCode()} loadStages error: ${it.message}"
-                        );
+                        )
                     }
                 )
         )
@@ -73,7 +74,7 @@ class SendStatusViewModel : ViewModel() {
             nnPrefs.fieldThreeId,
             format.format(Calendar.getInstance().time)
         ).replace("\\n", "")
-        val requestBody = RequestBody.create("text/plain".toMediaType(), formattedBody)
+        val requestBody = formattedBody.toRequestBody("text/plain".toMediaType())
         val authHeader = "Basic ${stagesPrefs?.authHeader}"
         requests.add(
             NetworkObjectsHolder.barcodeParseApi.sendParsingToPlanFix(
@@ -89,7 +90,7 @@ class SendStatusViewModel : ViewModel() {
                         Log.d(
                             "APP_TAG",
                             "${this::class.java.simpleName} ${this::class.java.hashCode()} sendStatus error: ${it.message}"
-                        );
+                        )
                     }
                 )
         )

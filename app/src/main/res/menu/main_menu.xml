@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/menu_settings_product" android:icon="@android:drawable/btn_star" android:title="Товары Settings"/>
-    <item android:id="@+id/menu_settings_stages" android:icon="@android:drawable/btn_star" android:title="Этапы Settings"/>
+    <item
+        android:id="@+id/menu_settings_product"
+        android:icon="@android:drawable/btn_star"
+        android:title="Товары Settings" />
+    <item
+        android:id="@+id/menu_settings_stages"
+        android:icon="@android:drawable/btn_star"
+        android:title="Этапы Settings" />
 </menu>

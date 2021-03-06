@@ -1,17 +1,12 @@
 package ru.nds.planfix.scan.ui.scanner
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
-import com.google.zxing.Result
 import me.dm7.barcodescanner.zxing.ZXingScannerView
 import org.koin.android.viewmodel.ext.android.viewModel
-import ru.nds.planfix.scan.ui.main.MainActivity
 import ru.nds.planfix.scan.R
 import ru.nds.planfix.scan.databinding.ScanerFragmentBinding
 

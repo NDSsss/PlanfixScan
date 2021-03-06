@@ -1,6 +1,5 @@
 package ru.nds.planfix.scan.data
 
-import android.util.Log
 import okhttp3.ResponseBody
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserFactory
@@ -26,9 +25,9 @@ data class SidResponse(
 
 fun XmlPullParser.parseSidResponse(): SidResponse {
     var sid = ""
-    while (eventType != XmlPullParser.END_DOCUMENT){
-        when(eventType){
-            XmlPullParser.TEXT ->{
+    while (eventType != XmlPullParser.END_DOCUMENT) {
+        when (eventType) {
+            XmlPullParser.TEXT -> {
                 sid = text
             }
         }

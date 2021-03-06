@@ -13,12 +13,10 @@ import ru.nds.planfix.scan.ui.scanner.ScannerCoordinator
 import ru.nds.planfix.scan.ui.scanner.ScannerFragment
 import ru.nds.planfix.scan.ui.status.SendStatusFragment
 
-class GlobalCoordinator(
-
-) : SetUpCoordinator, ChooserCoordinator, MainCoordinator, ScannerCoordinator, ProductsCoordinator {
+class GlobalCoordinator : SetUpCoordinator, ChooserCoordinator, MainCoordinator, ScannerCoordinator, ProductsCoordinator {
 
     init {
-        Log.d("APP_TAG", "${this::class.java.simpleName} ${this::class.java.hashCode()} : ");
+        Log.d("APP_TAG", "${this::class.java.simpleName} ${this::class.java.hashCode()} : ")
     }
 
     private var fm: FragmentManager? = null
@@ -30,7 +28,7 @@ class GlobalCoordinator(
         Log.d(
             "APP_TAG",
             "${this::class.java.simpleName} ${this::class.java.hashCode()} setFragmentManager: "
-        );
+        )
         this.fm = fm
         pendingOperations.forEach {
             it.invoke(fm)

@@ -8,10 +8,10 @@ sealed class CodeState {
     object UnParsed : CodeState()
 }
 
-data class CodeModel(val code: String, val state: CodeState, var price:Int = 0){
+data class CodeModel(val code: String, val state: CodeState, var price: Int = 0) {
 
-    fun toParsedResult():String{
-        return when(state){
+    fun toParsedResult(): String {
+        return when (state) {
             is CodeState.Parsed -> "${state.description} Цена - $price"
             CodeState.Undefined, CodeState.UnParsed -> "Not Found. Code - $code Цена - $price"
         }

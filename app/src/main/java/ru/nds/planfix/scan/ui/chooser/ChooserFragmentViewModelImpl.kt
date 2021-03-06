@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 
 class ChooserFragmentViewModelImpl(
     private val chooserCoordinator: ChooserCoordinator
-): ViewModel(), ChooserFragmentViewModel {
+) : ViewModel(), ChooserFragmentViewModel {
     override fun openProductsScan() {
         chooserCoordinator.openProductsScan()
     }

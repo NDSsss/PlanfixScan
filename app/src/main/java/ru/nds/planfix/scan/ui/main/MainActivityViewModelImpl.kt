@@ -9,6 +9,7 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.ResponseBody
 import ru.nds.planfix.scan.R
 import ru.nds.planfix.scan.YandexMetricaActions
@@ -71,7 +72,7 @@ class MainActivityViewModelImpl(
             userPassword = settingsJson.userPassword,
             settingType = SettingType.PRODUCT
         )
-        productPrefs?.apply {
+        productPrefs.apply {
             account = settingsJson.account
             userLogin = settingsJson.userLogin
             taskId = settingsJson.taskId
@@ -95,7 +96,7 @@ class MainActivityViewModelImpl(
             userPassword = settingsJson.userPassword,
             settingType = SettingType.STAGES
         )
-        productPrefs?.apply {
+        productPrefs.apply {
             account = settingsJson.account
             userLogin = settingsJson.userLogin
             taskId = settingsJson.taskId
@@ -111,7 +112,7 @@ class MainActivityViewModelImpl(
         when (settingType) {
             SettingType.PRODUCT -> productPrefs
             SettingType.STAGES -> stagesPrefs
-        }?.generateAuth(apiKey, token)
+        }.generateAuth(apiKey, token)
     }
 
     private fun getSid(
@@ -128,9 +129,9 @@ class MainActivityViewModelImpl(
         Log.d(
             "APP_TAG",
             "${this::class.java.simpleName} ${this::class.java.hashCode()} formattedBody: $formattedBody"
-        );
-        val requestBody = RequestBody.create("text/plain".toMediaType(), formattedBody)
-        val authHeader = "Basic ${productPrefs?.authHeader}"
+        )
+        val requestBody = formattedBody.toRequestBody("text/plain".toMediaType())
+        val authHeader = "Basic ${productPrefs.authHeader}"
 
         requests.add(
             NetworkObjectsHolder.barcodeParseApi.sendParsingToPlanFix(

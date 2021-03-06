@@ -3,7 +3,6 @@ package ru.nds.planfix.scan.di
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
-import ru.nds.planfix.scan.data.IPrefsStorage
 import ru.nds.planfix.scan.data.ProductsPrefs
 import ru.nds.planfix.scan.data.StagesPrefs
 

@@ -1,6 +1,6 @@
 package ru.nds.planfix.scan.ui.chooser
 
-interface ChooserCoordinator: BaseCoordinator {
+interface ChooserCoordinator : BaseCoordinator {
     fun openProductsScan()
     fun openStagesScan()
 }

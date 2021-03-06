@@ -20,7 +20,7 @@ interface IPrefsStorage {
 
 class ProductsPrefs(
     context: Context
-):PrefsStorage(
+) : PrefsStorage(
     context,
     SETTINGS_PREFS_NAME
 ) {
@@ -31,7 +31,7 @@ class ProductsPrefs(
 
 class StagesPrefs(
     context: Context
-):PrefsStorage(
+) : PrefsStorage(
     context,
     SETTINGS_PREFS_NAME
 ) {
