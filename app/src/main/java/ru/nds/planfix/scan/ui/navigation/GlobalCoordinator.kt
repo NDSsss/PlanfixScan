@@ -1,23 +1,20 @@
 package ru.nds.planfix.scan.ui.navigation
 
-import android.util.Log
 import android.util.SparseArray
 import androidx.fragment.app.FragmentManager
 import io.reactivex.rxjava3.core.Observable
 import ru.nds.planfix.scan.R
 import ru.nds.planfix.scan.ui.chooser.ChooserCoordinator
 import ru.nds.planfix.scan.ui.chooser.ChooserFragment
+import ru.nds.planfix.scan.ui.main.MainCoordinator
 import ru.nds.planfix.scan.ui.products.ProductsCoordinator
 import ru.nds.planfix.scan.ui.products.ProductsFragment
 import ru.nds.planfix.scan.ui.scanner.ScannerCoordinator
 import ru.nds.planfix.scan.ui.scanner.ScannerFragment
-import ru.nds.planfix.scan.ui.status.SendStatusFragment
+import ru.nds.planfix.scan.ui.stages.StagesFragment
 
-class GlobalCoordinator : SetUpCoordinator, ChooserCoordinator, MainCoordinator, ScannerCoordinator, ProductsCoordinator {
-
-    init {
-        Log.d("APP_TAG", "${this::class.java.simpleName} ${this::class.java.hashCode()} : ")
-    }
+class GlobalCoordinator : SetUpCoordinator, ChooserCoordinator, MainCoordinator, ScannerCoordinator,
+    ProductsCoordinator {
 
     private var fm: FragmentManager? = null
 
@@ -25,10 +22,6 @@ class GlobalCoordinator : SetUpCoordinator, ChooserCoordinator, MainCoordinator,
     private val resultListeners = SparseArray<ResultListener>()
 
     override fun setFragmentManager(fm: FragmentManager) {
-        Log.d(
-            "APP_TAG",
-            "${this::class.java.simpleName} ${this::class.java.hashCode()} setFragmentManager: "
-        )
         this.fm = fm
         pendingOperations.forEach {
             it.invoke(fm)
@@ -99,7 +92,7 @@ class GlobalCoordinator : SetUpCoordinator, ChooserCoordinator, MainCoordinator,
         commitOnActiveFm {
             it.beginTransaction()
                 .addToBackStack(ChooserFragment.TAG)
-                .replace(R.id.container, SendStatusFragment.newInstance(), SendStatusFragment.TAG)
+                .replace(R.id.container, StagesFragment.newInstance(), StagesFragment.TAG)
                 .commit()
         }
     }

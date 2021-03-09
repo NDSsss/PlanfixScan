@@ -34,6 +34,7 @@ class App : Application() {
         loadKoinModules(notificationsModule)
         loadKoinModules(chooserModule)
         loadKoinModules(productsModule)
+        loadKoinModules(stagesModule)
         loadKoinModules(scannerModule)
     }
 }

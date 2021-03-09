@@ -9,6 +9,7 @@ import org.koin.android.viewmodel.ext.android.viewModel
 import ru.nds.planfix.scan.R
 import ru.nds.planfix.scan.databinding.FragmentProductsBinding
 import ru.nds.planfix.scan.ui.main.MainActivity
+import ru.nds.planfix.scan.ui.utils.viewBinding
 
 class ProductsFragment : Fragment(R.layout.fragment_products) {
 
@@ -17,28 +18,21 @@ class ProductsFragment : Fragment(R.layout.fragment_products) {
         fun newInstance() = ProductsFragment()
     }
 
-    private var binding: FragmentProductsBinding? = null
+    private val binding: FragmentProductsBinding by viewBinding()
 
     private val viewModel: ProductsViewModel by viewModel<ProductsViewModelImpl>()
+
     private val codesAdapter = CodesAdapter(object : ICodeDeleteListener {
         override fun onProductDelete(position: Int) {
             viewModel.onProductDelete(position)
         }
     })
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return inflater.inflate(R.layout.fragment_products, container, false)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding = FragmentProductsBinding.bind(view)
-        binding?.codes?.adapter = codesAdapter
-        binding?.scan?.setOnClickListener { viewModel.openScanner() }
-        binding?.send?.setOnClickListener {
+        binding.codes.adapter = codesAdapter
+        binding.scan.setOnClickListener { viewModel.openScanner() }
+        binding.send.setOnClickListener {
             viewModel.sendParsingToPlanFix()
         }
 
@@ -46,14 +40,8 @@ class ProductsFragment : Fragment(R.layout.fragment_products) {
     }
 
     override fun onDestroyView() {
-        binding?.codes?.adapter = null
-        binding = null
+        binding.codes.adapter = null
         super.onDestroyView()
-    }
-
-    override fun onDestroy() {
-        (activity as? MainActivity)?.codeScannedListener = null
-        super.onDestroy()
     }
 
 }

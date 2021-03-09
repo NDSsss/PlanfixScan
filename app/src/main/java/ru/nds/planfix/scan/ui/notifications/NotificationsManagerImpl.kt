@@ -8,7 +8,7 @@ class NotificationsManagerImpl : NotificationsManagerSetUp, NotificationsManager
     private var activity: Activity? = null
     private val pendingOperations: MutableList<(Activity) -> Unit> = mutableListOf()
 
-    override fun showNotification(message: String) {
+    override fun showNotification(message: String?) {
         commitOnActiveActivity {
             Toast.makeText(it, message, Toast.LENGTH_SHORT).show()
         }

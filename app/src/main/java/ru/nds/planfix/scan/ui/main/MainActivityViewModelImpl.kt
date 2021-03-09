@@ -8,7 +8,6 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.ResponseBody
 import ru.nds.planfix.scan.R
@@ -20,10 +19,12 @@ import ru.nds.planfix.scan.data.SidResponse
 import ru.nds.planfix.scan.di.NetworkObjectsHolder
 import ru.nds.planfix.scan.models.ProductSettingsQr
 import ru.nds.planfix.scan.models.StagesSettingsQr
-import ru.nds.planfix.scan.ui.navigation.MainCoordinator
 import ru.nds.planfix.scan.ui.navigation.SetUpCoordinator
 import ru.nds.planfix.scan.ui.notifications.NotificationsManager
 import ru.nds.planfix.scan.ui.notifications.NotificationsManagerSetUp
+import ru.nds.planfix.scan.ui.scanner.ScannerViewModelImpl
+import java.text.SimpleDateFormat
+import java.util.*
 
 class MainActivityViewModelImpl(
     private val notificationsManagerSetUp: NotificationsManagerSetUp,
@@ -43,8 +44,28 @@ class MainActivityViewModelImpl(
         setUpCoordinator.removeFragmentManager()
     }
 
-    override fun openChooser() {
+    private fun openChooser() {
         mainCoordinator.openChooser()
+    }
+
+    override fun openProductSettingsScanner() {
+        requests.add(
+            mainCoordinator.addResultListener<String>(ScannerViewModelImpl.CODE_SCANNED_RESULT)
+                .subscribe {
+                    onProductSettingsQrScanned(it)
+                }
+        )
+        mainCoordinator.openScanner()
+    }
+
+    override fun openStagesSettingsScanner() {
+        requests.add(
+            mainCoordinator.addResultListener<String>(ScannerViewModelImpl.CODE_SCANNED_RESULT)
+                .subscribe {
+                    onStagesSettingQrScanned(it)
+                }
+        )
+        mainCoordinator.openScanner()
     }
 
     override fun setActivity(activity: Activity) {
@@ -57,7 +78,7 @@ class MainActivityViewModelImpl(
 
     private val requests = CompositeDisposable()
 
-    override fun onProductSettingsQrScanned(configJson: String) {
+    private fun onProductSettingsQrScanned(configJson: String) {
         YandexMetricaActions.onSettingsScanned(configJson)
         val settingsJson =
             NetworkObjectsHolder.gson.fromJson(configJson, ProductSettingsQr::class.java)
@@ -81,7 +102,7 @@ class MainActivityViewModelImpl(
         }
     }
 
-    override fun onStagesSettingQrScanned(configJson: String) {
+    private fun onStagesSettingQrScanned(configJson: String) {
         YandexMetricaActions.onSettingsScanned(configJson)
         val settingsJson =
             NetworkObjectsHolder.gson.fromJson(configJson, StagesSettingsQr::class.java)
@@ -153,6 +174,20 @@ class MainActivityViewModelImpl(
                     }
                 )
         )
+    }
+
+    override fun onCameraPermissionsGranted() {
+        if (checkExpired()) {
+            notificationsManager.showNotification(appResources.getString(R.string.error_demo_expired))
+        } else {
+            openChooser()
+        }
+    }
+
+    private fun checkExpired(): Boolean {
+        val expiredDate = "21/03/2021"
+        val format = SimpleDateFormat("dd/MM/yyyy")
+        return Date().after(format.parse(expiredDate))
     }
 
     private fun ResponseBody?.toSid(): String {

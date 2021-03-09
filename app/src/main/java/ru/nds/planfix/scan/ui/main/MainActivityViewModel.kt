@@ -10,8 +10,7 @@ interface MainActivityViewModel {
     fun setActivity(activity: Activity)
     fun removeActivity()
 
-    fun onProductSettingsQrScanned(configJson: String)
-    fun onStagesSettingQrScanned(configJson: String)
-
-    fun openChooser()
+    fun onCameraPermissionsGranted()
+    fun openProductSettingsScanner()
+    fun openStagesSettingsScanner()
 }
