@@ -4,14 +4,10 @@ import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import ru.nds.planfix.scan.data.ProductsPrefs
 import ru.nds.planfix.scan.data.StagesPrefs
-import ru.nds.planfix.scan.ui.chooser.BaseCoordinator
-import ru.nds.planfix.scan.ui.chooser.ChooserCoordinator
 import ru.nds.planfix.scan.ui.main.MainActivityViewModelImpl
-import ru.nds.planfix.scan.ui.navigation.GlobalCoordinator
 import ru.nds.planfix.scan.ui.main.MainCoordinator
-import ru.nds.planfix.scan.ui.navigation.SetUpCoordinator
-import ru.nds.planfix.scan.ui.products.ProductsCoordinator
-import ru.nds.planfix.scan.ui.scanner.ScannerCoordinator
+import ru.nds.planfix.scan.ui.navigation.GlobalCoordinator
+import ru.nds.planfix.coordinator.SetUpCoordinator
 
 val appModule = module {
     viewModel {
@@ -22,16 +18,19 @@ val appModule = module {
             mainCoordinator = get(),
             productPrefs = get<ProductsPrefs>(),
             stagesPrefs = get<StagesPrefs>(),
-            appResources = get()
+            appResources = get(),
+            barcodeParseApi = get(),
+            gson = get(),
+            yametric = get(),
         )
     }
 
     single { GlobalCoordinator() }
 
     factory<SetUpCoordinator> { get<GlobalCoordinator>() }
-    factory<BaseCoordinator> { get<GlobalCoordinator>() }
+    factory<ru.nds.planfix.coordinator.BaseCoordinator> { get<GlobalCoordinator>() }
     factory<MainCoordinator> { get<GlobalCoordinator>() }
-    factory<ChooserCoordinator> { get<GlobalCoordinator>() }
-    factory<ScannerCoordinator> { get<GlobalCoordinator>() }
-    factory<ProductsCoordinator> { get<GlobalCoordinator>() }
+    factory<ru.nds.planfix.chooser.ChooserCoordinator> { get<GlobalCoordinator>() }
+    factory<ru.nds.planfix.scaner.ScannerCoordinator> { get<GlobalCoordinator>() }
+    factory<ru.nds.planfix.products.ProductsCoordinator> { get<GlobalCoordinator>() }
 }

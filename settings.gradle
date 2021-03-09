@@ -1,2 +1,16 @@
-include ':app'
+include ':features:chooser'
+include ':features:shared:resultcodes'
+include ':yametric'
+include ':features:products'
+include ':features:scaner'
+include ':common:binding'
+include ':models'
+include ':common:coordinator'
+include ':features:stages'
+include ':network'
+include ':common:prefs'
 rootProject.name = "Planfix Scan"
+include ':app'
+
+include ':common:resources'
+include ':common:notifications'

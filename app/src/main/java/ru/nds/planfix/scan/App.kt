@@ -7,7 +7,16 @@ import com.yandex.metrica.YandexMetricaConfig
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.loadKoinModules
 import org.koin.core.context.startKoin
+import ru.nds.planfix.appResources.di.appResourcesModule
+import ru.nds.planfix.chooser.di.chooserModule
+import ru.nds.planfix.network.di.networkModule
+import ru.nds.planfix.notifications.di.notificationsModule
+import ru.nds.planfix.prefs.di.prefsModule
+import ru.nds.planfix.products.di.productsModule
 import ru.nds.planfix.scan.di.*
+import ru.nds.planfix.scaner.di.scannerModule
+import ru.nds.planfix.stages.di.stagesModule
+import ru.nds.planfix.yametric.di.yaMetricModule
 
 
 class App : Application() {
@@ -32,6 +41,8 @@ class App : Application() {
         loadKoinModules(appResourcesModule)
         loadKoinModules(prefsModule)
         loadKoinModules(notificationsModule)
+        loadKoinModules(networkModule)
+        loadKoinModules(yaMetricModule)
         loadKoinModules(chooserModule)
         loadKoinModules(productsModule)
         loadKoinModules(stagesModule)

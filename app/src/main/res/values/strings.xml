@@ -1,24 +1,6 @@
 <resources>
     <string name="app_name">Planfix Scan</string>
 
-    <string name="notification_success">Успешно</string>
-
     <string name="error_sid_fetch">Ошибка получения sid</string>
     <string name="error_demo_expired">Истек срок пробной версии, обратитесь к администратору</string>
-    <string name="error_send_data_to_planfix">Ошибка отправки данных в Planfix</string>
-    <string name="error_barcode_parsing">Ошибка парсинга штрих-кода</string>
-    <string name="error_stage_not_selected">Выберите этап</string>
-
-    <string name="frag_chooser_to_products">Отсканировать продукты</string>
-    <string name="frag_chooser_to_stages">Отправить статус</string>
-
-    <string name="setting_api_key_hint">Api Key</string>
-    <string name="setting_token_hint">Token</string>
-    <string name="setting_generate_auth">Создать код аутентификации</string>
-    <string name="setting_workspace">Название компании</string>
-    <string name="setting_login">Логин пользователя</string>
-    <string name="setting_password">Пароль пользователя</string>
-    <string name="setting_generate_sid">Получить SID</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

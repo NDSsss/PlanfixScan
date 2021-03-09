@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="frag_chooser_to_products">Отсканировать продукты</string>
+    <string name="frag_chooser_to_stages">Отправить статус</string>
+</resources>

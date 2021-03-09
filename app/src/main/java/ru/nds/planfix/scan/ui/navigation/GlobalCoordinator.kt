@@ -4,17 +4,13 @@ import android.util.SparseArray
 import androidx.fragment.app.FragmentManager
 import io.reactivex.rxjava3.core.Observable
 import ru.nds.planfix.scan.R
-import ru.nds.planfix.scan.ui.chooser.ChooserCoordinator
-import ru.nds.planfix.scan.ui.chooser.ChooserFragment
+import ru.nds.planfix.coordinator.SetUpCoordinator
 import ru.nds.planfix.scan.ui.main.MainCoordinator
-import ru.nds.planfix.scan.ui.products.ProductsCoordinator
-import ru.nds.planfix.scan.ui.products.ProductsFragment
-import ru.nds.planfix.scan.ui.scanner.ScannerCoordinator
-import ru.nds.planfix.scan.ui.scanner.ScannerFragment
-import ru.nds.planfix.scan.ui.stages.StagesFragment
+import ru.nds.planfix.stages.StagesFragment
 
-class GlobalCoordinator : SetUpCoordinator, ChooserCoordinator, MainCoordinator, ScannerCoordinator,
-    ProductsCoordinator {
+class GlobalCoordinator : SetUpCoordinator, ru.nds.planfix.chooser.ChooserCoordinator, MainCoordinator,
+    ru.nds.planfix.scaner.ScannerCoordinator,
+    ru.nds.planfix.products.ProductsCoordinator {
 
     private var fm: FragmentManager? = null
 
@@ -74,7 +70,7 @@ class GlobalCoordinator : SetUpCoordinator, ChooserCoordinator, MainCoordinator,
     override fun openChooser() {
         commitOnActiveFm {
             it.beginTransaction()
-                .replace(R.id.container, ChooserFragment.newInstance(), ProductsFragment.TAG)
+                .replace(R.id.container, ru.nds.planfix.chooser.ChooserFragment.newInstance(), ru.nds.planfix.products.ProductsFragment.TAG)
                 .commitNow()
         }
     }
@@ -82,8 +78,8 @@ class GlobalCoordinator : SetUpCoordinator, ChooserCoordinator, MainCoordinator,
     override fun openProductsScan() {
         commitOnActiveFm {
             it.beginTransaction()
-                .addToBackStack(ChooserFragment.TAG)
-                .replace(R.id.container, ProductsFragment.newInstance(), ProductsFragment.TAG)
+                .addToBackStack(ru.nds.planfix.chooser.ChooserFragment.TAG)
+                .replace(R.id.container, ru.nds.planfix.products.ProductsFragment.newInstance(), ru.nds.planfix.products.ProductsFragment.TAG)
                 .commit()
         }
     }
@@ -91,7 +87,7 @@ class GlobalCoordinator : SetUpCoordinator, ChooserCoordinator, MainCoordinator,
     override fun openStagesScan() {
         commitOnActiveFm {
             it.beginTransaction()
-                .addToBackStack(ChooserFragment.TAG)
+                .addToBackStack(ru.nds.planfix.chooser.ChooserFragment.TAG)
                 .replace(R.id.container, StagesFragment.newInstance(), StagesFragment.TAG)
                 .commit()
         }
@@ -101,7 +97,7 @@ class GlobalCoordinator : SetUpCoordinator, ChooserCoordinator, MainCoordinator,
         commitOnActiveFm {
             it.beginTransaction()
                 .addToBackStack("openScanner")
-                .replace(R.id.container, ScannerFragment.newInstance(), ScannerFragment.TAG)
+                .replace(R.id.container, ru.nds.planfix.scaner.ScannerFragment.newInstance(), ru.nds.planfix.scaner.ScannerFragment.TAG)
                 .commit()
         }
     }

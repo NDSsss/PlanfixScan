@@ -4,25 +4,24 @@ import android.app.Activity
 import android.util.Log
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModel
+import com.google.gson.Gson
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.ResponseBody
+import ru.nds.planfix.network.BarcodeParseApi
+import ru.nds.planfix.notifications.NotificationsManager
+import ru.nds.planfix.notifications.NotificationsManagerSetUp
 import ru.nds.planfix.scan.R
-import ru.nds.planfix.scan.YandexMetricaActions
 import ru.nds.planfix.scan.appResources.AppResources
 import ru.nds.planfix.scan.data.IPrefsStorage
-import ru.nds.planfix.scan.data.PlanFixRequestTemplates
+import ru.nds.planfix.network.PlanFixRequestTemplates
+import ru.nds.planfix.resultcodes.CODE_SCANNED_RESULT
 import ru.nds.planfix.scan.data.SidResponse
-import ru.nds.planfix.scan.di.NetworkObjectsHolder
-import ru.nds.planfix.scan.models.ProductSettingsQr
-import ru.nds.planfix.scan.models.StagesSettingsQr
-import ru.nds.planfix.scan.ui.navigation.SetUpCoordinator
-import ru.nds.planfix.scan.ui.notifications.NotificationsManager
-import ru.nds.planfix.scan.ui.notifications.NotificationsManagerSetUp
-import ru.nds.planfix.scan.ui.scanner.ScannerViewModelImpl
+import ru.nds.planfix.coordinator.SetUpCoordinator
+import ru.nds.planfix.yametric.IYandexMetricaActions
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -34,6 +33,9 @@ class MainActivityViewModelImpl(
     private val productPrefs: IPrefsStorage,
     private val stagesPrefs: IPrefsStorage,
     private val appResources: AppResources,
+    private val barcodeParseApi: BarcodeParseApi,
+    private val gson: Gson,
+    private val yametric: IYandexMetricaActions
 ) : ViewModel(), MainActivityViewModel {
 
     override fun setFragmentManager(fm: FragmentManager) {
@@ -50,7 +52,7 @@ class MainActivityViewModelImpl(
 
     override fun openProductSettingsScanner() {
         requests.add(
-            mainCoordinator.addResultListener<String>(ScannerViewModelImpl.CODE_SCANNED_RESULT)
+            mainCoordinator.addResultListener<String>(CODE_SCANNED_RESULT)
                 .subscribe {
                     onProductSettingsQrScanned(it)
                 }
@@ -60,7 +62,7 @@ class MainActivityViewModelImpl(
 
     override fun openStagesSettingsScanner() {
         requests.add(
-            mainCoordinator.addResultListener<String>(ScannerViewModelImpl.CODE_SCANNED_RESULT)
+            mainCoordinator.addResultListener<String>(CODE_SCANNED_RESULT)
                 .subscribe {
                     onStagesSettingQrScanned(it)
                 }
@@ -79,9 +81,9 @@ class MainActivityViewModelImpl(
     private val requests = CompositeDisposable()
 
     private fun onProductSettingsQrScanned(configJson: String) {
-        YandexMetricaActions.onSettingsScanned(configJson)
+        yametric.onSettingsScanned(configJson)
         val settingsJson =
-            NetworkObjectsHolder.gson.fromJson(configJson, ProductSettingsQr::class.java)
+            gson.fromJson(configJson, ru.nds.planfix.models.ProductSettingsQr::class.java)
         createAuth(
             apiKey = settingsJson.apiKey,
             token = settingsJson.token,
@@ -103,9 +105,9 @@ class MainActivityViewModelImpl(
     }
 
     private fun onStagesSettingQrScanned(configJson: String) {
-        YandexMetricaActions.onSettingsScanned(configJson)
+        yametric.onSettingsScanned(configJson)
         val settingsJson =
-            NetworkObjectsHolder.gson.fromJson(configJson, StagesSettingsQr::class.java)
+            gson.fromJson(configJson, ru.nds.planfix.models.StagesSettingsQr::class.java)
         createAuth(
             apiKey = settingsJson.apiKey,
             token = settingsJson.token,
@@ -155,7 +157,7 @@ class MainActivityViewModelImpl(
         val authHeader = "Basic ${productPrefs.authHeader}"
 
         requests.add(
-            NetworkObjectsHolder.barcodeParseApi.sendParsingToPlanFix(
+            barcodeParseApi.sendParsingToPlanFix(
                 url = PlanFixRequestTemplates.PLANFIX_API_URL,
                 authHeader = authHeader,
                 body = requestBody
