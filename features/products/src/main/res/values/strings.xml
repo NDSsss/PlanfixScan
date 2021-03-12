@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="error_barcode_parsing">Ошибка парсинга штрих-кода</string>
+    <string name="error_send_data_to_planfix">Ошибка отправки данных в Planfix</string>
+</resources>
