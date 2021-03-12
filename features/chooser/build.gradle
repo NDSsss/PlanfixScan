@@ -37,6 +37,7 @@ android {
 
 dependencies {
 
+    implementation project(path: ':common:base')
     implementation project(path: ':common:resources')
     implementation project(path: ':common:notifications')
     implementation project(path: ':common:prefs')

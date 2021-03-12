@@ -1,3 +1,6 @@
+include ':common:base'
+include ':common:design'
+include ':features:selecttask'
 include ':features:chooser'
 include ':features:shared:resultcodes'
 include ':yametric'

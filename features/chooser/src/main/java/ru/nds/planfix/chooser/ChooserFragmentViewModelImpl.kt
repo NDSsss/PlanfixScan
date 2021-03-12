@@ -1,10 +1,10 @@
 package ru.nds.planfix.chooser
 
-import androidx.lifecycle.ViewModel
+import ru.nds.planfix.base.BaseViewModelImpl
 
 class ChooserFragmentViewModelImpl(
     private val chooserCoordinator: ChooserCoordinator
-) : ViewModel(), ChooserFragmentViewModel {
+) : BaseViewModelImpl(), ChooserFragmentViewModel {
     override fun openProductsScan() {
         chooserCoordinator.openProductsScan()
     }

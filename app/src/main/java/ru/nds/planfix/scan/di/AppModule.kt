@@ -2,8 +2,8 @@ package ru.nds.planfix.scan.di
 
 import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.dsl.module
-import ru.nds.planfix.scan.data.ProductsPrefs
-import ru.nds.planfix.scan.data.StagesPrefs
+import ru.nds.planfix.prefs.ProductsPrefs
+import ru.nds.planfix.prefs.StagesPrefs
 import ru.nds.planfix.scan.ui.main.MainActivityViewModelImpl
 import ru.nds.planfix.scan.ui.main.MainCoordinator
 import ru.nds.planfix.scan.ui.navigation.GlobalCoordinator

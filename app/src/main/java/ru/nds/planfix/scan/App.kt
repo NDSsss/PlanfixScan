@@ -15,6 +15,7 @@ import ru.nds.planfix.prefs.di.prefsModule
 import ru.nds.planfix.products.di.productsModule
 import ru.nds.planfix.scan.di.*
 import ru.nds.planfix.scaner.di.scannerModule
+import ru.nds.planfix.selecttask.di.selectTaskModule
 import ru.nds.planfix.stages.di.stagesModule
 import ru.nds.planfix.yametric.di.yaMetricModule
 
@@ -43,6 +44,7 @@ class App : Application() {
         loadKoinModules(notificationsModule)
         loadKoinModules(networkModule)
         loadKoinModules(yaMetricModule)
+        loadKoinModules(selectTaskModule)
         loadKoinModules(chooserModule)
         loadKoinModules(productsModule)
         loadKoinModules(stagesModule)

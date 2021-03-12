@@ -37,6 +37,8 @@ android {
 
 dependencies {
 
+    implementation project(path: ':common:base')
+    implementation project(path: ':common:design')
     implementation project(path: ':common:resources')
     implementation project(path: ':common:notifications')
     implementation project(path: ':common:prefs')
@@ -52,6 +54,7 @@ dependencies {
     implementation project(path: ':features:stages')
     implementation project(path: ':features:products')
     implementation project(path: ':features:chooser')
+    implementation project(path: ':features:selecttask')
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.core:core-ktx:1.3.2'

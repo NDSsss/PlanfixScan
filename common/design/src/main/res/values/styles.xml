@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="BaseTextAppearance" parent="Base.TextAppearance.AppCompat">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:typeface">sans</item>
+    </style>
+
+    <style name="BaseButtonTextAppearance" parent="Base.TextAppearance.AppCompat.Button">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:typeface">sans</item>
+    </style>
+
+    <style name="FullScreenMessageTitle" parent="BaseTextAppearance">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="FullScreenMessageMessage" parent="BaseTextAppearance">
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="FullScreenMessageAction" parent="BaseButtonTextAppearance"></style>
+</resources>

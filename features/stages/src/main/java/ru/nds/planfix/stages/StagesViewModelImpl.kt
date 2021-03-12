@@ -2,20 +2,20 @@ package ru.nds.planfix.stages
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
+import ru.nds.planfix.base.BaseViewModelImpl
 import ru.nds.planfix.coordinator.BaseCoordinator
 import ru.nds.planfix.models.HandbookRecord
 import ru.nds.planfix.models.parseHandbookRecords
 import ru.nds.planfix.network.BarcodeParseApi
 import ru.nds.planfix.network.PlanFixRequestTemplates
 import ru.nds.planfix.notifications.NotificationsManager
+import ru.nds.planfix.prefs.IPrefsStorage
 import ru.nds.planfix.scan.appResources.AppResources
-import ru.nds.planfix.scan.data.IPrefsStorage
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -25,7 +25,7 @@ class StagesViewModelImpl(
     private val appResources: AppResources,
     private val coordinator: BaseCoordinator,
     private val barcodeParseApi: BarcodeParseApi,
-) : ViewModel(), StagesViewModel {
+) : BaseViewModelImpl(), StagesViewModel {
 
     private val requests = CompositeDisposable()
     override val stages: MutableLiveData<List<HandbookRecord>> = MutableLiveData(listOf())

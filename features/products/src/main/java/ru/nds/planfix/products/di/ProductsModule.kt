@@ -3,7 +3,7 @@ package ru.nds.planfix.products.di
 import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import ru.nds.planfix.products.ProductsViewModelImpl
-import ru.nds.planfix.scan.data.ProductsPrefs
+import ru.nds.planfix.prefs.ProductsPrefs
 
 val productsModule = module {
     viewModel {

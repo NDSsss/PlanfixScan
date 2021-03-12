@@ -1,9 +1,9 @@
 package ru.nds.planfix.products
 
 import androidx.lifecycle.LiveData
-import ru.nds.planfix.models.CodeModel
+import ru.nds.planfix.base.BaseViewModel
 
-interface ProductsViewModel {
+interface ProductsViewModel : BaseViewModel {
     val productsList: LiveData<List<ru.nds.planfix.models.CodeModel>>
 
     fun onCodeScanned(code: String)

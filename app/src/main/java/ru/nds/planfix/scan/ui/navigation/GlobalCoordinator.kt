@@ -3,12 +3,14 @@ package ru.nds.planfix.scan.ui.navigation
 import android.util.SparseArray
 import androidx.fragment.app.FragmentManager
 import io.reactivex.rxjava3.core.Observable
-import ru.nds.planfix.scan.R
 import ru.nds.planfix.coordinator.SetUpCoordinator
+import ru.nds.planfix.scan.R
 import ru.nds.planfix.scan.ui.main.MainCoordinator
+import ru.nds.planfix.selecttask.SelectTaskFragment
 import ru.nds.planfix.stages.StagesFragment
 
-class GlobalCoordinator : SetUpCoordinator, ru.nds.planfix.chooser.ChooserCoordinator, MainCoordinator,
+class GlobalCoordinator : SetUpCoordinator, ru.nds.planfix.chooser.ChooserCoordinator,
+    MainCoordinator,
     ru.nds.planfix.scaner.ScannerCoordinator,
     ru.nds.planfix.products.ProductsCoordinator {
 
@@ -67,10 +69,22 @@ class GlobalCoordinator : SetUpCoordinator, ru.nds.planfix.chooser.ChooserCoordi
         }
     }
 
+    override fun openTasks() {
+        commitOnActiveFm {
+            it.beginTransaction()
+                .replace(R.id.container, SelectTaskFragment.newInstance(), SelectTaskFragment.TAG)
+                .commitNow()
+        }
+    }
+
     override fun openChooser() {
         commitOnActiveFm {
             it.beginTransaction()
-                .replace(R.id.container, ru.nds.planfix.chooser.ChooserFragment.newInstance(), ru.nds.planfix.products.ProductsFragment.TAG)
+                .replace(
+                    R.id.container,
+                    ru.nds.planfix.chooser.ChooserFragment.newInstance(),
+                    ru.nds.planfix.products.ProductsFragment.TAG
+                )
                 .commitNow()
         }
     }
@@ -79,7 +93,11 @@ class GlobalCoordinator : SetUpCoordinator, ru.nds.planfix.chooser.ChooserCoordi
         commitOnActiveFm {
             it.beginTransaction()
                 .addToBackStack(ru.nds.planfix.chooser.ChooserFragment.TAG)
-                .replace(R.id.container, ru.nds.planfix.products.ProductsFragment.newInstance(), ru.nds.planfix.products.ProductsFragment.TAG)
+                .replace(
+                    R.id.container,
+                    ru.nds.planfix.products.ProductsFragment.newInstance(),
+                    ru.nds.planfix.products.ProductsFragment.TAG
+                )
                 .commit()
         }
     }
@@ -97,7 +115,11 @@ class GlobalCoordinator : SetUpCoordinator, ru.nds.planfix.chooser.ChooserCoordi
         commitOnActiveFm {
             it.beginTransaction()
                 .addToBackStack("openScanner")
-                .replace(R.id.container, ru.nds.planfix.scaner.ScannerFragment.newInstance(), ru.nds.planfix.scaner.ScannerFragment.TAG)
+                .replace(
+                    R.id.container,
+                    ru.nds.planfix.scaner.ScannerFragment.newInstance(),
+                    ru.nds.planfix.scaner.ScannerFragment.TAG
+                )
                 .commit()
         }
     }

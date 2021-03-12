@@ -8,6 +8,7 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
+import ru.nds.planfix.base.BaseViewModelImpl
 import ru.nds.planfix.models.toCodeModel
 import ru.nds.planfix.network.BarcodeParseApi
 import ru.nds.planfix.network.PlanFixRequestTemplates.BARCODE_PARSE_URL
@@ -16,7 +17,7 @@ import ru.nds.planfix.network.PlanFixRequestTemplates.XML_REQUEST_TEMPLATE
 import ru.nds.planfix.notifications.NotificationsManager
 import ru.nds.planfix.resultcodes.CODE_SCANNED_RESULT
 import ru.nds.planfix.scan.appResources.AppResources
-import ru.nds.planfix.scan.data.IPrefsStorage
+import ru.nds.planfix.prefs.IPrefsStorage
 import ru.nds.planfix.yametric.IYandexMetricaActions
 
 class ProductsViewModelImpl(
@@ -26,7 +27,7 @@ class ProductsViewModelImpl(
     private val notificationsManager: NotificationsManager,
     private val barcodeParseApi: BarcodeParseApi,
     private val yametric: IYandexMetricaActions,
-) : ViewModel(), ProductsViewModel {
+) : BaseViewModelImpl(), ProductsViewModel {
 
     private val requests = CompositeDisposable()
 

@@ -16,7 +16,7 @@ import ru.nds.planfix.notifications.NotificationsManager
 import ru.nds.planfix.notifications.NotificationsManagerSetUp
 import ru.nds.planfix.scan.R
 import ru.nds.planfix.scan.appResources.AppResources
-import ru.nds.planfix.scan.data.IPrefsStorage
+import ru.nds.planfix.prefs.IPrefsStorage
 import ru.nds.planfix.network.PlanFixRequestTemplates
 import ru.nds.planfix.resultcodes.CODE_SCANNED_RESULT
 import ru.nds.planfix.scan.data.SidResponse
@@ -48,6 +48,7 @@ class MainActivityViewModelImpl(
 
     private fun openChooser() {
         mainCoordinator.openChooser()
+//        mainCoordinator.openTasks()
     }
 
     override fun openProductSettingsScanner() {

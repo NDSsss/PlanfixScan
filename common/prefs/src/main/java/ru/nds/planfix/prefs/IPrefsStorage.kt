@@ -1,4 +1,4 @@
-package ru.nds.planfix.scan.data
+package ru.nds.planfix.prefs
 
 import android.content.Context
 import android.content.SharedPreferences

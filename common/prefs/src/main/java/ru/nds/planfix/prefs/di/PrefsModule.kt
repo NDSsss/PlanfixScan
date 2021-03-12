@@ -1,10 +1,11 @@
 package ru.nds.planfix.prefs.di
 
 import org.koin.android.ext.koin.androidContext
-import org.koin.core.qualifier.named
 import org.koin.dsl.module
-import ru.nds.planfix.scan.data.ProductsPrefs
-import ru.nds.planfix.scan.data.StagesPrefs
+import ru.nds.planfix.prefs.CommonPrefsStorage
+import ru.nds.planfix.prefs.ICommonPrefs
+import ru.nds.planfix.prefs.ProductsPrefs
+import ru.nds.planfix.prefs.StagesPrefs
 
 val prefsModule = module {
     factory {
@@ -12,5 +13,8 @@ val prefsModule = module {
     }
     factory {
         StagesPrefs(androidContext())
+    }
+    factory<ICommonPrefs> {
+        CommonPrefsStorage(androidContext())
     }
 }

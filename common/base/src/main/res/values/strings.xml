@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="unknown_error_title">Что-то пошло не так</string>
+    <string name="unknown_error_message">Попробуйте повторить позже</string>
+    <string name="unknown_error_action">Повторить</string>
+</resources>

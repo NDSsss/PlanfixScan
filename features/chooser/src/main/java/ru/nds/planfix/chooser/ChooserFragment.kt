@@ -2,19 +2,19 @@ package ru.nds.planfix.chooser
 
 import android.os.Bundle
 import android.view.View
-import androidx.fragment.app.Fragment
 import org.koin.android.viewmodel.ext.android.viewModel
+import ru.nds.planfix.base.BaseFragment
 import ru.nds.planfix.binding.viewBinding
 import ru.nds.planfix.chooser.databinding.FragChooserBinding
 
-class ChooserFragment : Fragment(R.layout.frag_chooser) {
+class ChooserFragment : BaseFragment<ChooserFragmentViewModel>(R.layout.frag_chooser) {
 
     companion object {
         const val TAG = "ChooserFragment"
         fun newInstance() = ChooserFragment()
     }
 
-    private val viewModel: ChooserFragmentViewModel by viewModel<ChooserFragmentViewModelImpl>()
+    override val viewModel: ChooserFragmentViewModel by viewModel<ChooserFragmentViewModelImpl>()
 
     private val binding: FragChooserBinding by viewBinding()
 

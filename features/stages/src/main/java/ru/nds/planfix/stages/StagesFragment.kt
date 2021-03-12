@@ -3,12 +3,12 @@ package ru.nds.planfix.stages
 import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
-import androidx.fragment.app.Fragment
 import org.koin.android.viewmodel.ext.android.viewModel
+import ru.nds.planfix.base.BaseFragment
 import ru.nds.planfix.binding.viewBinding
 import ru.nds.planfix.stages.databinding.FragmentStagesBinding
 
-class StagesFragment : Fragment(R.layout.fragment_stages) {
+class StagesFragment : BaseFragment<StagesViewModel>(R.layout.fragment_stages) {
 
     companion object {
         const val TAG = "SendStatusFragment"
@@ -17,7 +17,7 @@ class StagesFragment : Fragment(R.layout.fragment_stages) {
 
     private val binding: FragmentStagesBinding by viewBinding()
 
-    private val viewModel: StagesViewModel by viewModel<StagesViewModelImpl>()
+    override val viewModel: StagesViewModel by viewModel<StagesViewModelImpl>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

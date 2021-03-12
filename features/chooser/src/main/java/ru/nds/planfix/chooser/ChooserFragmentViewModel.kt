@@ -1,6 +1,8 @@
 package ru.nds.planfix.chooser
 
-interface ChooserFragmentViewModel {
+import ru.nds.planfix.base.BaseViewModel
+
+interface ChooserFragmentViewModel: BaseViewModel {
     fun openProductsScan()
     fun openStagesScan()
 }
