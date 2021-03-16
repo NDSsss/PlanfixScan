@@ -9,14 +9,17 @@ import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import ru.nds.planfix.network.BarcodeParseApi
+import ru.nds.planfix.network.PlanfixApi
+import ru.nds.planfix.network.SchedulersProvider
+import ru.nds.planfix.network.SchedulersProviderImpl
 
 val networkModule = module {
-    factory {
+    single {
         GsonBuilder()
             .setLenient()
             .create()
     }
-    factory {
+    single {
         val gson: Gson = get()
         Retrofit.Builder()
             .client(
@@ -33,8 +36,15 @@ val networkModule = module {
             )
             .build()
     }
+
+    factory<SchedulersProvider> { SchedulersProviderImpl() }
+
     factory {
         val retrofit: Retrofit = get()
         retrofit.create(BarcodeParseApi::class.java)
+    }
+    factory {
+        val retrofit: Retrofit = get()
+        retrofit.create(PlanfixApi::class.java)
     }
 }

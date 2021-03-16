@@ -1,13 +1,13 @@
 package ru.nds.planfix.base
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.viewbinding.ViewBinding
 import ru.nds.planfix.base.databinding.IncludeBaseFullScreenMessageBinding
 
 abstract class BaseFragment<Vm : BaseViewModel>(
@@ -24,6 +24,10 @@ abstract class BaseFragment<Vm : BaseViewModel>(
     }
 
     protected open fun handleScreenState(state: ScreenState) {
+        Log.d(
+            "APP_TAG",
+            "${this::class.java.simpleName} ${this::class.java.hashCode()} handleScreenState state: $state"
+        );
         if (state is BaseScreenState) {
             when (state) {
                 BaseScreenState.Loading -> {

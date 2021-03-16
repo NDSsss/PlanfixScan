@@ -8,6 +8,7 @@ import ru.nds.planfix.scan.ui.main.MainActivityViewModelImpl
 import ru.nds.planfix.scan.ui.main.MainCoordinator
 import ru.nds.planfix.scan.ui.navigation.GlobalCoordinator
 import ru.nds.planfix.coordinator.SetUpCoordinator
+import ru.nds.planfix.selecttask.SelectTaskCoordinator
 
 val appModule = module {
     viewModel {
@@ -22,6 +23,7 @@ val appModule = module {
             barcodeParseApi = get(),
             gson = get(),
             yametric = get(),
+            tasksPrefs = get(),
         )
     }
 
@@ -33,4 +35,5 @@ val appModule = module {
     factory<ru.nds.planfix.chooser.ChooserCoordinator> { get<GlobalCoordinator>() }
     factory<ru.nds.planfix.scaner.ScannerCoordinator> { get<GlobalCoordinator>() }
     factory<ru.nds.planfix.products.ProductsCoordinator> { get<GlobalCoordinator>() }
+    factory<SelectTaskCoordinator> { get<GlobalCoordinator>() }
 }

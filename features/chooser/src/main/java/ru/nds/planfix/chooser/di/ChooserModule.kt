@@ -7,6 +7,8 @@ import ru.nds.planfix.chooser.ChooserFragmentViewModelImpl
 val chooserModule = module {
     viewModel {
         ChooserFragmentViewModelImpl(
+            appResources = get(),
+            notificationsManager = get(),
             chooserCoordinator = get()
         )
     }

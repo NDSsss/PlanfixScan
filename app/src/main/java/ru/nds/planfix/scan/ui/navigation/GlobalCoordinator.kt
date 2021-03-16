@@ -6,13 +6,15 @@ import io.reactivex.rxjava3.core.Observable
 import ru.nds.planfix.coordinator.SetUpCoordinator
 import ru.nds.planfix.scan.R
 import ru.nds.planfix.scan.ui.main.MainCoordinator
+import ru.nds.planfix.selecttask.SelectTaskCoordinator
 import ru.nds.planfix.selecttask.SelectTaskFragment
 import ru.nds.planfix.stages.StagesFragment
 
 class GlobalCoordinator : SetUpCoordinator, ru.nds.planfix.chooser.ChooserCoordinator,
     MainCoordinator,
     ru.nds.planfix.scaner.ScannerCoordinator,
-    ru.nds.planfix.products.ProductsCoordinator {
+    ru.nds.planfix.products.ProductsCoordinator,
+    SelectTaskCoordinator {
 
     private var fm: FragmentManager? = null
 

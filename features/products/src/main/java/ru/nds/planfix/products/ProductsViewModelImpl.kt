@@ -21,13 +21,13 @@ import ru.nds.planfix.prefs.IPrefsStorage
 import ru.nds.planfix.yametric.IYandexMetricaActions
 
 class ProductsViewModelImpl(
+    appResources: AppResources,
+    notificationsManager: NotificationsManager,
     val prefs: IPrefsStorage,
     private val productsCoordinator: ProductsCoordinator,
-    private val appResources: AppResources,
-    private val notificationsManager: NotificationsManager,
     private val barcodeParseApi: BarcodeParseApi,
     private val yametric: IYandexMetricaActions,
-) : BaseViewModelImpl(), ProductsViewModel {
+) : BaseViewModelImpl(appResources, notificationsManager), ProductsViewModel {
 
     private val requests = CompositeDisposable()
 

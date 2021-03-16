@@ -13,4 +13,5 @@ interface MainActivityViewModel {
     fun onCameraPermissionsGranted()
     fun openProductSettingsScanner()
     fun openStagesSettingsScanner()
+    fun openTasksSettingsScanner()
 }

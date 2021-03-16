@@ -6,7 +6,7 @@
         <item name="android:typeface">sans</item>
     </style>
 
-    <style name="BaseButtonTextAppearance" parent="Base.TextAppearance.AppCompat.Button">
+    <style name="BaseButtonTextAppearance" parent="TextAppearance.MaterialComponents.Button">
         <item name="android:textColor">@color/black</item>
         <item name="android:typeface">sans</item>
     </style>

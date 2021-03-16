@@ -21,6 +21,7 @@ import ru.nds.planfix.network.PlanFixRequestTemplates
 import ru.nds.planfix.resultcodes.CODE_SCANNED_RESULT
 import ru.nds.planfix.scan.data.SidResponse
 import ru.nds.planfix.coordinator.SetUpCoordinator
+import ru.nds.planfix.prefs.ITasksPrefs
 import ru.nds.planfix.yametric.IYandexMetricaActions
 import java.text.SimpleDateFormat
 import java.util.*
@@ -32,6 +33,7 @@ class MainActivityViewModelImpl(
     private val mainCoordinator: MainCoordinator,
     private val productPrefs: IPrefsStorage,
     private val stagesPrefs: IPrefsStorage,
+    private val tasksPrefs: ITasksPrefs,
     private val appResources: AppResources,
     private val barcodeParseApi: BarcodeParseApi,
     private val gson: Gson,
@@ -44,11 +46,6 @@ class MainActivityViewModelImpl(
 
     override fun removeFragmentManager() {
         setUpCoordinator.removeFragmentManager()
-    }
-
-    private fun openChooser() {
-        mainCoordinator.openChooser()
-//        mainCoordinator.openTasks()
     }
 
     override fun openProductSettingsScanner() {
@@ -70,6 +67,17 @@ class MainActivityViewModelImpl(
         )
         mainCoordinator.openScanner()
     }
+
+    override fun openTasksSettingsScanner() {
+        requests.add(
+            mainCoordinator.addResultListener<String>(CODE_SCANNED_RESULT)
+                .subscribe {
+                    onTasksSettingQrScanned(it)
+                }
+        )
+        mainCoordinator.openScanner()
+    }
+
 
     override fun setActivity(activity: Activity) {
         notificationsManagerSetUp.setActivity(activity)
@@ -132,11 +140,34 @@ class MainActivityViewModelImpl(
         }
     }
 
+    private fun onTasksSettingQrScanned(configJson: String) {
+        yametric.onSettingsScanned(configJson)
+        val settingsJson =
+            gson.fromJson(configJson, ru.nds.planfix.models.TasksSettingsQr::class.java)
+        createAuth(
+            apiKey = settingsJson.apiKey,
+            token = settingsJson.token,
+            settingType = SettingType.TASKS
+        )
+        Log.d(
+            "APP_TAG",
+            "${this::class.java.simpleName} ${this::class.java.hashCode()} onTasksSettingQrScanned settingsJson: $settingsJson"
+        );
+        tasksPrefs.apply {
+            account = settingsJson.account
+            robotName = settingsJson.robotName
+            generalTaskNumber = settingsJson.generalTaskNumber
+            analiticId = settingsJson.analiticId
+            analiticFieldId = settingsJson.analiticFieldId
+        }
+    }
+
     private fun createAuth(apiKey: String, token: String, settingType: SettingType) {
         when (settingType) {
-            SettingType.PRODUCT -> productPrefs
-            SettingType.STAGES -> stagesPrefs
-        }.generateAuth(apiKey, token)
+            SettingType.PRODUCT -> productPrefs.generateAuth(apiKey, token)
+            SettingType.STAGES -> stagesPrefs.generateAuth(apiKey, token)
+            SettingType.TASKS -> tasksPrefs.generateAuth(apiKey, token)
+        }
     }
 
     private fun getSid(
@@ -168,9 +199,10 @@ class MainActivityViewModelImpl(
                 .subscribe(
                     { sid ->
                         when (settingType) {
-                            SettingType.PRODUCT -> productPrefs
-                            SettingType.STAGES -> stagesPrefs
-                        }.sid = sid.sid
+                            SettingType.PRODUCT -> productPrefs.sid = sid.sid
+                            SettingType.STAGES -> stagesPrefs.sid = sid.sid
+                            SettingType.TASKS -> {}
+                        }
                         notificationsManager.showNotification(appResources.getString(R.string.notification_success))
                     }, {
                         notificationsManager.showNotification(appResources.getString(R.string.error_sid_fetch))
@@ -183,7 +215,7 @@ class MainActivityViewModelImpl(
         if (checkExpired()) {
             notificationsManager.showNotification(appResources.getString(R.string.error_demo_expired))
         } else {
-            openChooser()
+            mainCoordinator.openTasks()
         }
     }
 
@@ -211,7 +243,8 @@ class MainActivityViewModelImpl(
 
     private enum class SettingType {
         PRODUCT,
-        STAGES
+        STAGES,
+        TASKS
     }
 
 }

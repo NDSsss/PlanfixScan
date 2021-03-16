@@ -3,17 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/baseFullScreenMessageContainer"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:clickable="true"
+    android:focusable="true">
 
     <TextView
-        android:layout_marginHorizontal="@dimen/base_margin"
-        android:layout_marginVertical="@dimen/base_vertical_margin"
-        android:textAppearance="@style/FullScreenMessageTitle"
-        android:gravity="center"
-        android:text="@string/unknown_error_title"
         android:id="@+id/baseFullScreenMessageTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/base_margin"
+        android:layout_marginVertical="@dimen/base_vertical_margin"
+        android:gravity="center"
+        android:text="@string/unknown_error_title"
+        android:textAppearance="@style/FullScreenMessageTitle"
         app:layout_constraintBottom_toTopOf="@id/baseFullScreenMessageMessage"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,27 +24,27 @@
         app:layout_constraintVertical_chainStyle="packed" />
 
     <TextView
-        android:layout_marginHorizontal="@dimen/base_margin"
-        android:layout_marginVertical="@dimen/base_vertical_margin"
-        android:textAppearance="@style/FullScreenMessageMessage"
-        android:gravity="center"
-        android:text="@string/unknown_error_message"
         android:id="@+id/baseFullScreenMessageMessage"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/base_margin"
+        android:layout_marginVertical="@dimen/base_vertical_margin"
+        android:gravity="center"
+        android:text="@string/unknown_error_message"
+        android:textAppearance="@style/FullScreenMessageMessage"
         app:layout_constraintBottom_toTopOf="@id/baseFullScreenMessageAction"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/baseFullScreenMessageTitle" />
 
     <Button
-        android:layout_marginHorizontal="@dimen/base_margin"
-        android:layout_marginVertical="@dimen/base_vertical_margin"
-        android:textAppearance="@style/FullScreenMessageAction"
-        android:text="@string/unknown_error_action"
         android:id="@+id/baseFullScreenMessageAction"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/base_margin"
+        android:layout_marginVertical="@dimen/base_vertical_margin"
+        android:text="@string/unknown_error_action"
+        android:textAppearance="@style/FullScreenMessageAction"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

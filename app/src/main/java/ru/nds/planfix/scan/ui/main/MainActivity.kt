@@ -38,6 +38,10 @@ class MainActivity : AppCompatActivity() {
                 viewModel.openStagesSettingsScanner()
                 true
             }
+            R.id.menu_settings_tasks -> {
+                viewModel.openTasksSettingsScanner()
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
 

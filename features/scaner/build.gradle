@@ -39,6 +39,7 @@ dependencies {
 
     implementation project(path: ':common:base')
     implementation project(path: ':common:notifications')
+    implementation project(path: ':common:resources')
     implementation project(path: ':common:coordinator')
     implementation project(path: ':common:binding')
 

@@ -20,12 +20,12 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class StagesViewModelImpl(
+    notificationsManager: NotificationsManager,
+    appResources: AppResources,
     private val stagesPrefs: IPrefsStorage,
-    private val notificationsManager: NotificationsManager,
-    private val appResources: AppResources,
     private val coordinator: BaseCoordinator,
     private val barcodeParseApi: BarcodeParseApi,
-) : BaseViewModelImpl(), StagesViewModel {
+) : BaseViewModelImpl(appResources, notificationsManager), StagesViewModel {
 
     private val requests = CompositeDisposable()
     override val stages: MutableLiveData<List<HandbookRecord>> = MutableLiveData(listOf())

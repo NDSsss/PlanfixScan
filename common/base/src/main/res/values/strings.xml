@@ -3,4 +3,11 @@
     <string name="unknown_error_title">Что-то пошло не так</string>
     <string name="unknown_error_message">Попробуйте повторить позже</string>
     <string name="unknown_error_action">Повторить</string>
+    <string name="internet_error_title">Нет подключения к интернету</string>
+    <string name="internet_error_message">Подключитесь к интернету и повторите</string>
+    <string name="internet_error_action">Повторить</string>
+    <string name="scan_prefs_error_title">Неправильные настройки</string>
+    <string name="scan_prefs_error_message">Отсканируйте QR с настройками и повторите попытку</string>
+    <string name="scan_prefs_error_action">Повторить</string>
+    <string name="send">Отправить</string>
 </resources>
