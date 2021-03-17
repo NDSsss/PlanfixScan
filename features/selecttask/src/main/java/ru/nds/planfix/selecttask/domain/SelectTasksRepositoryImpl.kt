@@ -16,9 +16,7 @@ class SelectTasksRepositoryImpl(
 ) : SelectTasksRepository {
 
     override fun isSettingsScanned(): Boolean {
-        return taskPrefs.account.isNotBlank()
-                && taskPrefs.authHeader.isNotBlank()
-                && taskPrefs.generalTaskNumber.isNotBlank()
+        return taskPrefs.isScanned()
     }
 
     override fun loadTasksAndStatuses(): Single<TaskEntityResponse> {

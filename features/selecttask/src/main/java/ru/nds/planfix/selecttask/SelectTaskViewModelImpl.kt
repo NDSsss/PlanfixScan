@@ -30,7 +30,7 @@ class SelectTaskViewModelImpl(
     }
 
     private fun checkSettings() {
-        screenState.postValue(BaseScreenState.ShowContent)
+        screenState.value = BaseScreenState.ShowContent
         if (selectTasksRepository.isSettingsScanned()) {
             loadTasks()
         } else {

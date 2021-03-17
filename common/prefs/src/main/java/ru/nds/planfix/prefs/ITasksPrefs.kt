@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import android.util.Base64
 
 interface ITasksPrefs {
+    fun isScanned(): Boolean
     fun generateAuth(apiKey: String, token: String)
     var authHeader: String
     var account: String
@@ -30,6 +31,15 @@ class TasksPrefsStorage(
 
     private val prefs =
         context.applicationContext.getSharedPreferences(COMMON_PREFS_NAME, Context.MODE_PRIVATE)
+
+    override fun isScanned(): Boolean {
+        return authHeader.isNotBlank()
+                && account.isNotBlank()
+                && robotName.isNotBlank()
+                && generalTaskNumber.isNotBlank()
+                && analiticId.isNotBlank()
+                && analiticFieldId.isNotBlank()
+    }
 
     override fun generateAuth(apiKey: String, token: String) {
         val encoded = Base64.encodeToString("$apiKey:$token".toByteArray(), Base64.NO_WRAP)
